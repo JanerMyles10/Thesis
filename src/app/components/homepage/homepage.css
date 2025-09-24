@@ -262,62 +262,6 @@
             margin: 0 auto;
         }
 
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .product-image {
-            height: 250px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .product-card:nth-child(2) .product-image {
-            background: linear-gradient(45deg, #f093fb, #f5576c);
-        }
-
-        .product-card:nth-child(3) .product-image {
-            background: linear-gradient(45deg, #4facfe, #00f2fe);
-        }
-
-        .product-card:nth-child(4) .product-image {
-            background: linear-gradient(45deg, #43e97b, #38f9d7);
-        }
-
-        .product-info {
-            padding: 1.5rem;
-        }
-
-        .product-info h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-
         .add-to-cart {
             width: 100%;
             padding: 0.8rem;
@@ -334,3 +278,47 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
+
+        .products {
+  padding: 50px 20px;
+  background: #f9fafb;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.product-card h3 {
+  font-size: 1.2rem;
+  color: #1e293b;
+  margin-bottom: 10px;
+}

@@ -1,271 +1,35 @@
-<div class="dashboard">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">LUXE</div>
-                <div class="seller-info">
-                    <div>Welcome, John Seller</div>
-                    <small>Premium Seller</small>
-                </div>
-            </div>
-            <nav>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a class="nav-link active" onclick="showSection('dashboard')">
-                            <span class="nav-icon">📊</span>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('orders')">
-                            <span class="nav-icon">📦</span>
-                            Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('products')">
-                            <span class="nav-icon">🛍️</span>
-                            Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('analytics')">
-                            <span class="nav-icon">📈</span>
-                            Analytics
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('settings')">
-                            <span class="nav-icon">⚙️</span>
-                            Settings
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <div class="header">
-                <div>
-                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
-                    <h1>Seller Dashboard</h1>
-                </div>
-                <div class="user-profile">
-                    <div class="profile-avatar">JS</div>
-                    <span>John Seller</span>
-                </div>
-            </div>
-
-            <!-- Dashboard Section -->
-            <div class="content-section active" id="dashboard">
-                <!-- Stats Cards -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">📦</div>
-                        <div class="stat-value" id="totalOrders">127</div>
-                        <div class="stat-label">Total Orders</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">⏳</div>
-                        <div class="stat-value" id="pendingOrders">8</div>
-                        <div class="stat-label">Pending Orders</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">💰</div>
-                        <div class="stat-value">$12,450</div>
-                        <div class="stat-label">Total Revenue</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🛍️</div>
-                        <div class="stat-value" id="totalProducts">24</div>
-                        <div class="stat-label">Active Products</div>
-                    </div>
-                </div>
-
-                <!-- Recent Orders -->
-                <div class="section-header">
-                    <h2 class="section-title">Recent Orders</h2>
-                    <button class="btn btn-primary" onclick="showSection('orders')">View All Orders</button>
-                </div>
-                <div class="table-container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Product</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentOrdersTable">
-                            <!-- Orders will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Orders Section -->
-            <div class="content-section" id="orders">
-                <div class="section-header">
-                    <h2 class="section-title">All Orders</h2>
-                    <div>
-                        <select class="form-select" onchange="filterOrders(this.value)" style="width: auto; margin-right: 1rem;">
-                            <option value="all">All Orders</option>
-                            <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="delivered">Delivered</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="table-container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allOrdersTable">
-                            <!-- Orders will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Products Section -->
-            <div class="content-section" id="products">
-                <div class="section-header">
-                    <h2 class="section-title">My Products</h2>
-                    <button class="btn btn-primary" onclick="openAddProductModal()">
-                        ➕ Add New Product
-                    </button>
-                </div>
-                <div class="table-container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productsTable">
-                            <!-- Products will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Analytics Section -->
-            <div class="content-section" id="analytics">
-                <div class="section-header">
-                    <h2 class="section-title">Sales Analytics</h2>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">📊</div>
-                        <div class="stat-value">$2,340</div>
-                        <div class="stat-label">This Week</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📈</div>
-                        <div class="stat-value">+15%</div>
-                        <div class="stat-label">Growth Rate</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-value">89</div>
-                        <div class="stat-label">New Customers</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">⭐</div>
-                        <div class="stat-value">4.8</div>
-                        <div class="stat-label">Avg Rating</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Settings Section -->
-            <div class="content-section" id="settings">
-                <div class="section-header">
-                    <h2 class="section-title">Account Settings</h2>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Store Name</label>
-                        <input type="text" class="form-input" value="John's Premium Store">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Contact Email</label>
-                        <input type="email" class="form-input" value="john@premiumstore.com">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" class="form-input" value="+1 234 567 8900">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Business Address</label>
-                        <textarea class="form-textarea">123 Business Street, City, State 12345</textarea>
-                    </div>
-                </div>
-                <button class="btn btn-primary">Save Changes</button>
-            </div>
-        </main>
+<div class="navbar-section">
+    <div class="logo">
+       <h1>Hello Seller!!</h1>
     </div>
+</div>
 
-    <!-- Add Product Modal -->
-    <div class="modal" id="addProductModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Product</h3>
-                <button class="close-btn" onclick="closeAddProductModal()">×</button>
-            </div>
-            <form onsubmit="addProduct(event)">
-                <div class="form-group">
-                    <label class="form-label">Product Name</label>
-                    <input type="text" class="form-input" id="productName" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Category</label>
-                    <select class="form-select" id="productCategory" required>
-                        <option value="">Select Category</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Fashion">Fashion</option>
-                        <option value="Home">Home & Living</option>
-                        <option value="Beauty">Beauty</option>
-                        <option value="Sports">Sports</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Price ($)</label>
-                    <input type="number" class="form-input" id="productPrice" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Stock Quantity</label>
-                    <input type="number" class="form-input" id="productStock" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" id="productDescription"></textarea>
-                </div>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button type="button" class="btn" onclick="closeAddProductModal()" style="background: #6b7280; color: white;">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Product</button>
-                </div>
-            </form>
-        </div>
-    </div>
+<div class="dashboard-container">
+
+ <button class="dashboard-button" routerLink="dash">
+  <i class="fa-solid fa-chart-pie"></i>
+  <p>Dashboard</p>
+</button>
+
+<button class="dashboard-button" routerLink="prod">
+  <i class="fa-brands fa-product-hunt"></i>
+    <p>Product</p>
+  </button>
+
+  <button class="dashboard-button" routerLink="orders">
+    <i class="fa-solid fa-boxes-stacked"></i>
+    <p>Orders</p>
+  </button>
+
+  <button class="dashboard-button"routerLink="report">
+    <i class="fa-solid fa-chart-line"></i>
+    <p>Reports</p>
+  </button>
+
+  <!-- Logout -->
+  <button class="dashboard-button" routerLink="logout">
+    <i class="fa-solid fa-right-from-bracket out-icon"></i>
+    <p>Logout</p>
+  </button>
+</div>
+<router-outlet></router-outlet>

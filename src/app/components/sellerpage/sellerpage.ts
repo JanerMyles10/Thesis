@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sellerpage',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './sellerpage.html',
-  styleUrl: './sellerpage.css'
+  styleUrl: './sellerpage.css',
 })
 export class Sellerpage {
 
