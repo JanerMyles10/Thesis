@@ -4,39 +4,9 @@
   margin: 0 auto;
 }
 
-.topbar {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-.search {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.search input {
-  padding: 0.5rem 0.75rem;
-  min-width: 260px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-}
-
-.search .search-btn {
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  border: 0;
-  background: #ff5722;
-  color: white;
-  cursor: pointer;
-}
-
-.filters label {
-  margin-left: 0.5rem;
+.container-fluid{
+  background-color: #f684f0;
+  padding: 0.5rem;
 }
 
 .grid {
@@ -84,19 +54,6 @@
   font-size: 11px;
 }
 
-.meta {
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.title {
-  color: #333;
-  text-decoration: none;
-  font-weight: 600;
-}
 
 .price-row {
   display: flex;

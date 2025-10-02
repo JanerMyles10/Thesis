@@ -16,7 +16,7 @@ export class Navbar {
   updateCart() {
     if (this.isLoggedIn) {
       // go to cart page
-      this.router.navigate(['/cart']);
+      this.router.navigate(['/homeprod']);
     } else {
       // go to login/register
       this.router.navigate(['/login']);

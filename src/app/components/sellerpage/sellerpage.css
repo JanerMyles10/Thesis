@@ -1,41 +1,9 @@
-.color {
-    background-color: #f8f7f7;
-    min-height: 100vh;
-}
-
-.navbar-section {
-  background: linear-gradient(90deg, #4f46e5, #38bdf8);
-  padding: 1rem;
-}
-
-.navbar-section h1 {
-  color: white; /* change text color */
-  margin: 0;
-  font-size: 2rem;
-  text-align: center;
-}
-
-
-.matcard {
-    height: 100%;
-    width: 50%;
-    margin-top: 3rem;
-    padding: auto;
-    justify-content: center;
-}
-
-.title {
-    font-size: x-large;
-    margin-top: 20px;
-    font-weight: 500;
-}
-
-.addbutton {
-    float: right;
+.container-fluid{
+  background-color: #db2020;
+  padding: 0.5rem;
 }
 
 .dashboard-container{
-
   display: flex;
   align-content: center;
   justify-content: center;
@@ -43,7 +11,6 @@
   margin: 100px auto;
 }
 
-/* Dashboard Button Styling */
 .dashboard-button {
     height: 110px;
     width: 120px;
@@ -79,7 +46,7 @@
 }
 
 .dashboard-button:hover {
-    background-color: #32cff6;
+    background-color: #f63232;
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
     transform: scale(1.04);
 }
@@ -102,7 +69,7 @@
 
 .dashboard-button:focus {
     outline: none;
-    background-color: #59f4c8 !important;
+    background-color: #ff3939 !important;
     color: white !important;
 }
 
@@ -119,26 +86,4 @@
     top: -0.2rem !important;
     right: -0.2rem !important;
     padding: 0 !important;
-}
-
-@media (max-width: 768px) {
-    .d-flex.justify-content-center {
-        justify-content: flex-start !important;
-        flex-wrap: nowrap !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        padding: 10px 15px !important;
-        gap: 15px !important;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-
-    .dashboard-button {
-        flex-shrink: 0 !important;
-        min-width: 120px !important;
-    }
-
-    .d-flex.justify-content-center::-webkit-scrollbar {
-        display: none;
-    }
 }

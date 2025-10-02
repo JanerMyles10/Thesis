@@ -1,1 +1,56 @@
-<p>products works!</p>
+<div class="d-flex justify-content-center gap-3">
+  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addProductModal">
+    Add New Product
+  </button>
+   <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addProductModal">
+    View Your Product
+  </button>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form #productForm="ngForm">
+        <div class="mb-3">
+         <label class="form-label">Product Name</label>
+    <input type="text" class="form-control" [(ngModel)]="newProduct.name" name="name" placeholder="Enter product name">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Price</label>
+    <input type="number" class="form-control" [(ngModel)]="newProduct.price" name="price" placeholder="Enter price">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Enter Image Here</label>
+    <input class="form-control" type="file" (change)="onFileSelected($event)" accept="image/*" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea class="form-control" [(ngModel)]="newProduct.description" name="description" rows="3" placeholder="Enter product description"></textarea>
+  </div>
+</form>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-primary" (click)="saveProduct()">Save Product</button>
+  </div>
+
+    </div>
+  </div>
+</div>

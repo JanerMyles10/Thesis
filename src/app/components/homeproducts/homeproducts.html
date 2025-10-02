@@ -1,64 +1,28 @@
+<div class="container-fluid">
+    <div class="logo">
+       <h1 style="text-align: center;">Welcome to Maker's Magic</h1>
+    </div>
+</div>
+
 <div class="products-page">
-  <section class="topbar">
-    <div class="search">
-      <input placeholder="Search products, sellers..." />
-      <button class="search-btn">Search</button>
-    </div>
-
-    <div class="filters">
-      <label>
-        Sort:
-        <select>
-          <option>Featured</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Top Rated</option>
-        </select>
-      </label>
-
-      <label>
-        Show:
-        <select>
-          <option>8</option>
-          <option>12</option>
-          <option>24</option>
-        </select>
-      </label>
-    </div>
-  </section>
-
   <section class="grid">
-    <div class="card">
-      <a href="#" class="thumb">
-        <img src="https://picsum.photos/seed/demo1/400/400" alt="Demo Product" />
-        <span class="badges">
-          <small>Free Shipping</small>
-        </span>
-      </a>
+  <div class="card" *ngFor="let product of products">
+    <a href="#" class="thumb">
+      <img [src]="product.imageUrl" [alt]="product.name" />
+      <span class="badges"><small>New</small></span>
+    </a>
 
-      <div class="meta">
-        <a href="#" class="title">Demo Product Title</a>
-
-        <div class="price-row">
-          <div class="price">₱199.00</div>
-          <div class="old">₱299.00</div>
-        </div>
-
-        <div class="rating">⭐ 4.5 • 120 reviews</div>
-
-        <div class="actions">
-          <button>Add to Cart</button>
-          <button class="buy">View</button>
-        </div>
+    <div class="meta">
+      <a href="#" class="title">{{ product.name }}</a>
+      <div class="price-row">
+        <div class="price">₱{{ product.price }}</div>
+      </div>
+      <p>{{ product.description }}</p>
+      <div class="actions">
+        <button>Add to Cart</button>
+        <button class="buy">View</button>
       </div>
     </div>
-
-    <!-- Repeat more cards here -->
-  </section>
-
-  <section class="pagination">
-    <button>Prev</button>
-    <span>Page 1 of 10</span>
-    <button>Next</button>
-  </section>
+  </div>
+</section>
 </div>

@@ -17,10 +17,9 @@ export class Login {
 
   onLogin() {
     if (this.email && this.password) {
-      // 🚀 Later replace with real AuthService
       localStorage.setItem('user', JSON.stringify({ email: this.email }));
       alert('Login successful!');
-      this.router.navigate(['/']); // go home after login
+      this.router.navigate(['']);
     } else {
       alert('Please enter email and password.');
     }
