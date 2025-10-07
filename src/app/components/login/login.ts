@@ -1,27 +1,35 @@
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, } from '@angular/core';
-import { FormsModule } from '@angular/forms'
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule,FormsModule,RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrls: ['./login.css']
 })
 export class Login {
-  email = '';
-  password = '';
+  loginData = { email: '', password: '' };
+  errorMessage = '';
 
-  constructor(private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
-  onLogin() {
-    if (this.email && this.password) {
-      localStorage.setItem('user', JSON.stringify({ email: this.email }));
-      alert('Login successful!');
-      this.router.navigate(['']);
-    } else {
-      alert('Please enter email and password.');
-    }
+  login() {
+    this.http.post<any>('http://localhost:5000/api/reg/login', this.loginData).subscribe({
+      next: (res) => {
+        alert(res.message);
+
+        this.router.navigate(['/homeprod']);
+      },
+      error: (err) => {
+        this.errorMessage = err.error.message || 'Login failed';
+      }
+    });
+  }
+
+  reg(){
+     this.router.navigate(['/reg']);
   }
 }

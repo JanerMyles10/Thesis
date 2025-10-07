@@ -1,10 +1,27 @@
 <div class="auth-container">
   <h2>Register</h2>
-  <form (ngSubmit)="onRegister()">
-    <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required />
-    <input type="password" [(ngModel)]="password" name="password" placeholder="Password" required />
-    <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required />
-    <button type="submit">Register</button>
+  <form (ngSubmit)="register()">
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="email" [(ngModel)]="newUser.email" name="email" required>
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" [(ngModel)]="newUser.password" name="password" required>
+    </div>
+
+    <div>
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+    </div>
+
+    <div *ngIf="passwordMismatch" style="color:red; margin-bottom:10px;">
+      Passwords do not match.
+    </div>
+
+    <button type="submit" [disabled]="passwordMismatch">Register</button>
   </form>
-  <p>Already have an account? <a routerLink="/login">Login</a></p>
+  <p (click)="login()">Already have Account? <a>Login here</a></p>
 </div>
+

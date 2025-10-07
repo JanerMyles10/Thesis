@@ -1,32 +1,47 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule,CommonModule,RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './register.html',
-  styleUrl: './register.css'
+  styleUrls: ['./register.css']
 })
 export class Register {
-   email = '';
-  password = '';
+  newUser = {
+    email: '',
+    password: ''
+  };
+
   confirmPassword = '';
+  passwordMismatch = false;
 
-  constructor(private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
-  onRegister() {
-    if (this.password !== this.confirmPassword) {
-      alert('Passwords do not match!');
+  register() {
+    // check if passwords match
+    if (this.newUser.password !== this.confirmPassword) {
+      this.passwordMismatch = true;
       return;
     }
-    if (this.email && this.password) {
-      localStorage.setItem('user', JSON.stringify({ email: this.email }));
-      alert('Registration successful!');
-      this.router.navigate(['/login']); // go to login after register
-    } else {
-      alert('Please fill all fields.');
-    }
+    this.passwordMismatch = false;
+
+    // send data to backend
+    this.http.post('http://localhost:5000/api/reg/register', this.newUser)
+      .subscribe({
+        next: (res: any) => {
+          alert(res.message || 'Registration successful!');
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          alert(err.error.message || 'Registration failed');
+        }
+      });
+  }
+  login(){
+    this.router.navigate(["/login"])
   }
 }

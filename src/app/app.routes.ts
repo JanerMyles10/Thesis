@@ -9,10 +9,11 @@ import { Dashboard } from './components/sellerpage/dashboard/dashboard';
 import { Orders } from './components/sellerpage/orders/orders';
 import { Products } from './components/sellerpage/products/products';
 import { Reports } from './components/sellerpage/reports/reports';
+import { AuthGuard } from './authguard/login-guard';
 
 export const routes: Routes = [
 
-  {path: '', component: Homepage},
+  { path: '', component: Homepage },
   {path: 'cart',  component: Cart},
   {path: 'login',  component: Login},
    {
@@ -26,5 +27,5 @@ export const routes: Routes = [
       ]
     },
   {path: 'reg',  component: Register},
-  {path: 'homeprod',  component: Homeproducts}
+  { path: 'homeprod', component: Homeproducts, canActivate: [AuthGuard] },
 ];

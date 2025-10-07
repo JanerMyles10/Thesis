@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService, Product } from '../../services/sellerpage';
+import { ProductService, } from '../../services/sellerpage';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart';
 
 @Component({
   selector: 'app-homeproducts',
@@ -9,13 +10,48 @@ import { CommonModule } from '@angular/common';
   styleUrl: './homeproducts.css'
 })
 export class Homeproducts  implements OnInit {
-  products: Product[] = [];
+   products: any[] = [];
+   cartCount = 0;
+   searchTerm: string = '';
 
-  constructor(private productService: ProductService) {}
+   userEmail: string | null = null;
 
-  ngOnInit() {
-    this.productService.getProducts().subscribe(data => {
-      this.products = data;
-    });
+
+  get filteredProducts() {
+    if (!this.searchTerm) return this.products;
+    const term = this.searchTerm.toLowerCase();
+    return this.products.filter(p =>
+      p.name?.toLowerCase().includes(term) ||
+      p.description?.toLowerCase().includes(term)
+    );
+  }
+
+  constructor(
+    private productService: ProductService,
+    private cartService: CartService
+  ) {}
+
+  ngOnInit(): void {
+  // Get logged-in user's email
+  this.userEmail = localStorage.getItem('userEmail');
+
+  // Load products from backend
+  this.productService.getProducts().subscribe((data) => {
+    this.products = data;
+  });
+
+  // Subscribe to cart count updates
+  this.cartService.cartCount$.subscribe(count => {
+    this.cartCount = count;
+  });
+}
+
+
+  addToCart(product: any) {
+    this.cartService.addToCart(product);
+  }
+
+  updateCart() {
+    console.log("Cart clicked! You can show a modal or navigate.");
   }
 }

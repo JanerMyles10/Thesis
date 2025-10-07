@@ -25,10 +25,12 @@ export class ProductService {
   addProduct(product: any): Observable<Product> {
   const formData = new FormData();
   formData.append("name", product.name);
-  formData.append("price", product.price);
-  formData.append("description", product.description);
+  // ensure values are strings where appropriate
+  formData.append("price", String(product.price));
+  formData.append("description", product.description || '');
   if (product.image) {
-    formData.append("image", product.image); // must match multer field name
+    // include the filename when appending a File/Blob so backend can use it
+    formData.append("image", product.image, (product.image && product.image.name) || 'image'); // must match multer field name
   }
 
   return this.http.post<Product>(this.apiUrl, formData);

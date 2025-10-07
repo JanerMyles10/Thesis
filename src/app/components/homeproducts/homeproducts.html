@@ -1,28 +1,48 @@
 <div class="container-fluid">
     <div class="logo">
-       <h1 style="text-align: center;">Welcome to Maker's Magic</h1>
+       <h1 style="text-align: center; color:white">Welcome to Maker's Magic</h1>
+        <p *ngIf="userEmail" style="text-align: center; color: lightgray;">
+      Logged in as <strong>{{ userEmail }}</strong>
     </div>
 </div>
 
+<div class="top-bar">
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" class="searchTerm" placeholder="What are you looking for?">
+    <button type="submit" class="searchButton">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
+
+
+  <div class="cart-icon" (click)="updateCart()">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
+  </div>
+</div>
+
+
+
 <div class="products-page">
   <section class="grid">
-  <div class="card" *ngFor="let product of products">
-    <a href="#" class="thumb">
-      <img [src]="product.imageUrl" [alt]="product.name" />
-      <span class="badges"><small>New</small></span>
-    </a>
+    <div class="card" *ngFor="let product of products">
+      <a href="#" class="thumb">
+        <img [src]="product.imageUrl" [alt]="product.name" />
+        <span class="badges"><small>New</small></span>
+      </a>
 
-    <div class="meta">
-      <a href="#" class="title">{{ product.name }}</a>
-      <div class="price-row">
-        <div class="price">₱{{ product.price }}</div>
-      </div>
-      <p>{{ product.description }}</p>
-      <div class="actions">
-        <button>Add to Cart</button>
-        <button class="buy">View</button>
+      <div class="meta">
+        <a href="#" class="title">{{ product.name }}</a>
+        <div class="price-row">
+          <div class="price">₱{{ product.price }}</div>
+        </div>
+        <p>{{ product.description }}</p>
+        <div class="actions">
+          <button (click)="addToCart(product)">Add to Cart</button>
+          <button class="buy">View</button>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 </div>

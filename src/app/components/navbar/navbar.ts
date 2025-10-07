@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterOutlet],
+  imports: [],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
@@ -15,10 +14,10 @@ export class Navbar {
 
   updateCart() {
     if (this.isLoggedIn) {
-      // go to cart page
-      this.router.navigate(['/homeprod']);
+
+      this.router.navigate(['/']);
     } else {
-      // go to login/register
+
       this.router.navigate(['/login']);
     }
   }

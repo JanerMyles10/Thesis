@@ -16,7 +16,12 @@ export class Products {
 
   // when file is chosen
   onFileSelected(event: any) {
-    this.newProduct.image = event.target.files[0];
+    const files = event?.target?.files;
+    if (files && files.length > 0) {
+      this.newProduct.image = files[0];
+    } else {
+      this.newProduct.image = null;
+    }
   }
 
   // save product to backend
