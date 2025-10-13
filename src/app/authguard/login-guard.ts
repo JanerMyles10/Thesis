@@ -9,13 +9,13 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const isLoggedIn = !!localStorage.getItem('user'); // check if user is logged in
+    const isLoggedIn = !!localStorage.getItem('userLoggedIn'); // check if user is logged in
 
     if (!isLoggedIn) {
       this.router.navigate(['/login']); // redirect to login page
       return false;
     }
 
-    return true; 
+    return true;
   }
 }
