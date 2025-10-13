@@ -79,6 +79,17 @@
   text-align: center;
 }
 
+.logout {
+  position: absolute;
+  left: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

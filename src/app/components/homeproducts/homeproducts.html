@@ -1,32 +1,31 @@
 <div class="container-fluid">
-    <div class="logo">
-       <h1 style="text-align: center; color:white">Welcome to Maker's Magic</h1>
-        <p *ngIf="userEmail" style="text-align: center; color: lightgray;">
-      Logged in as <strong>{{ userEmail }}</strong>
-    </div>
+  <div class="logo">
+    <h1 style="text-align: center; color:white">Welcome to Maker's Magic</h1>
+  </div>
 </div>
 
 <div class="top-bar">
-  <!-- Search -->
   <div class="search-box">
-    <input type="text" class="searchTerm" placeholder="What are you looking for?">
+    <input type="text" class="searchTerm" [(ngModel)]="searchTerm" placeholder="What are you looking for?">
     <button type="submit" class="searchButton">
       <i class="fa fa-search"></i>
     </button>
   </div>
 
-
   <div class="cart-icon" (click)="updateCart()">
     <i class="fas fa-shopping-cart"></i>
     <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
   </div>
+
+  <div class="logout">
+    <i class="fas fa-sign-out-alt"></i>
+    <span (click)="logout()">Logout</span>
+  </div>
 </div>
-
-
 
 <div class="products-page">
   <section class="grid">
-    <div class="card" *ngFor="let product of products">
+    <div class="card" *ngFor="let product of filteredProducts">
       <a href="#" class="thumb">
         <img [src]="product.imageUrl" [alt]="product.name" />
         <span class="badges"><small>New</small></span>
@@ -37,12 +36,38 @@
         <div class="price-row">
           <div class="price">₱{{ product.price }}</div>
         </div>
-        <p>{{ product.description }}</p>
         <div class="actions">
           <button (click)="addToCart(product)">Add to Cart</button>
-          <button class="buy">View</button>
+          <button class="buy" (click)="viewProduct(product)">View</button>
         </div>
       </div>
     </div>
   </section>
+</div>
+
+<!-- 🔽 View Product Modal -->
+<div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewProductModalLabel">{{ selectedProduct?.name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img
+          *ngIf="selectedProduct?.imageUrl"
+          [src]="selectedProduct.imageUrl"
+          [alt]="selectedProduct.name"
+          class="img-fluid mb-3"
+          style="border-radius: 10px; max-height: 250px;"
+        />
+        <p><strong>Price:</strong> ₱{{ selectedProduct?.price }}</p>
+        <p><strong>Description:</strong></p>
+        <p>{{ selectedProduct?.description }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>

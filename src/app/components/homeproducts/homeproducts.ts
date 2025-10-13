@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService, } from '../../services/sellerpage';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homeproducts',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './homeproducts.html',
   styleUrl: './homeproducts.css'
 })
@@ -16,6 +18,7 @@ export class Homeproducts  implements OnInit {
 
    userEmail: string | null = null;
 
+   selectedProduct: any = null;
 
   get filteredProducts() {
     if (!this.searchTerm) return this.products;
@@ -28,7 +31,8 @@ export class Homeproducts  implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -53,5 +57,19 @@ export class Homeproducts  implements OnInit {
 
   updateCart() {
     console.log("Cart clicked! You can show a modal or navigate.");
+  }
+
+  logout() {
+  localStorage.removeItem('token');  // 🗑 Remove JWT
+  this.router.navigate(['/']);
+}
+
+
+  viewProduct(product: any) {
+    this.selectedProduct = product;
+    const modal = new (window as any).bootstrap.Modal(
+      document.getElementById('viewProductModal')
+    );
+    modal.show();
   }
 }
