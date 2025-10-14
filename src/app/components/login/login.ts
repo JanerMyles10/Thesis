@@ -21,6 +21,9 @@ export class Login {
       next: (res) => {
         alert(res.message);
 
+        localStorage.setItem('userLoggedIn', 'true'); 
+        localStorage.setItem('userEmail', this.loginData.email);
+
         this.router.navigate(['/homeprod']);
       },
       error: (err) => {

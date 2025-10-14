@@ -60,7 +60,8 @@ export class Homeproducts  implements OnInit {
   }
 
   logout() {
-  localStorage.removeItem('userLoggedIn');  // 🗑 Remove JWT
+  localStorage.removeItem('userLoggedIn');
+  localStorage.removeItem('userEmail');  // 🗑 Remove JWT
   this.router.navigate(['/']);
 }
 
