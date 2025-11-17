@@ -4,6 +4,7 @@ import { Cart } from './components/cart/cart';
 import { Register } from './components/register/register';
 import { Login } from './components/login/login';
 import { Homeproducts } from './components/homeproducts/homeproducts';
+import { Mypurchases } from './components/mypurchases/mypurchases';
 import { Sellerpage } from './components/sellerpage/sellerpage';
 import { Dashboard } from './components/sellerpage/dashboard/dashboard';
 import { Orders } from './components/sellerpage/orders/orders';
@@ -16,6 +17,8 @@ export const routes: Routes = [
   { path: '', component: Homepage },
   {path: 'cart',  component: Cart},
   {path: 'login',  component: Login},
+  {path: 'reg',  component: Register},
+  {path: 'mypurchases',  component: Mypurchases},
    {
       path: 'seller',
       component: Sellerpage,
@@ -26,6 +29,5 @@ export const routes: Routes = [
         { path: 'report', component: Reports}
       ]
     },
-  {path: 'reg',  component: Register},
   { path: 'homeprod', component: Homeproducts, canActivate: [AuthGuard] },
 ];

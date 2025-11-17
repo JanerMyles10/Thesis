@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="logo">
-    <h1 style="text-align: center; color:white">Welcome to Maker's Magic</h1>
+    <h1>Welcome to Maker's Magic</h1>
   </div>
 </div>
 
@@ -17,22 +17,29 @@
     <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
   </div>
 
-  <div class="logout">
-    <i class="fas fa-sign-out-alt"></i>
-    <span (click)="logout()">Logout</span>
+  <div class="user-menu">
+    <div class="user-toggle">
+      {{ name }} <i class="fas fa-caret-down"></i>
+    </div>
+
+    <div class="user-dropdown">
+      <a routerLink="/mypurchases"><i class="fa-solid fa-money-check-dollar"></i>My Purchases</a>
+      <a href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    </div>
   </div>
 </div>
 
+
 <div class="products-page">
   <section class="grid">
-    <div class="card" *ngFor="let product of filteredProducts">
-      <a href="#" class="thumb">
-        <img [src]="product.imageUrl" [alt]="product.name" />
-        <span class="badges"><small>New</small></span>
-      </a>
-
+    <div class="card" *ngFor="let product of filteredProducts; let i = index">
+      <div class="thumb" (click)="viewProduct(product)">
+         <img [src]="product.imageUrl" [alt]="product.name" />
+         <span class="badges" *ngIf="i === 0"><small>New</small></span>
+      </div>
       <div class="meta">
-        <a href="#" class="title">{{ product.name }}</a>
+        <div class="artisanname">Artisan Name</div>
+        <div class="productname">{{ product.name }}</div>
         <div class="price-row">
           <div class="price">₱{{ product.price }}</div>
         </div>
@@ -45,7 +52,6 @@
   </section>
 </div>
 
-<!-- 🔽 View Product Modal -->
 <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -71,3 +77,26 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="addToCartModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title">Add to Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedProduct">
+        <strong><label for="product">Product</label></strong>
+        <p>{{ selectedProduct.name }}</p>
+        <strong><label for="description">Description</label></strong>
+        <p>{{ selectedProduct.description }}</p>
+        <label>Quantity:</label>
+        <input type="number" class="form-control mb-3" [(ngModel)]="selectedQuantity" min="1" />
+
+        <button class="btn btn-primary w-100" (click)="confirmAddToCart()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

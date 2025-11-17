@@ -1,12 +1,24 @@
+.container-fluid {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  padding: 1rem;
+  text-align: center;
+}
+
+.logo h1 {
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  overflow: hidden;               /* Hides overflowing text */
+  border-right: 3px solid white;  /* Blinking cursor */
+  white-space: nowrap;            /* Keep text on one line */
+  width: 0;                       /* Start hidden */
+  margin: 0 auto;
+  animation: typingLoop 6s steps(25) infinite, blink 0.7s step-end infinite;
+}
+
 .products-page {
   padding: 1rem;
   max-width: 1200px;
-  margin: 0 auto;
-}
-
-.container-fluid {
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  padding: 0.5rem;
 }
 
 .top-bar {
@@ -79,15 +91,53 @@
   text-align: center;
 }
 
+
 .logout {
+  display: none;
+}
+
+.user-menu {
   position: absolute;
   left: 20px;
-  cursor: pointer;
+  display: inline-block;
   font-size: 16px;
   color: #333;
+  cursor: pointer;
+  z-index: 20; /* make sure it stays on top */
+}
+
+.user-toggle {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%; /* 👈 closer to toggle */
+  background-color: #fff;
+  min-width: 160px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding-top: 5px; /* smooth transition */
+}
+
+.user-menu:hover .user-dropdown,
+.user-dropdown:hover {
+  display: block;
+}
+.user-dropdown a {
+  color: #333;
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.2s;
 }
 
 .grid {
@@ -191,5 +241,27 @@
   }
   .search input {
     min-width: 120px;
+  }
+}
+
+@keyframes typingLoop {
+  0% {
+    width: 0;
+  }
+  40% {
+    width: 25ch; 
+  }
+  60% {
+    width: 25ch;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
   }
 }

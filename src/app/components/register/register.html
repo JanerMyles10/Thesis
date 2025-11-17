@@ -1,27 +1,66 @@
-<div class="auth-container">
-  <h2>Register</h2>
-  <form (ngSubmit)="register()">
-    <div>
-      <label for="email">Email</label>
-      <input id="email" type="email" [(ngModel)]="newUser.email" name="email" required>
-    </div>
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <h2>Create Account ✨</h2>
+    <p class="subtitle">Join our community today</p>
 
-    <div>
-      <label for="password">Password</label>
-      <input id="password" type="password" [(ngModel)]="newUser.password" name="password" required>
-    </div>
+    <form (ngSubmit)="register()">
 
-    <div>
-      <label for="confirmPassword">Confirm Password</label>
-      <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
-    </div>
+      <div class="input-group">
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="newUser.email"
+          name="email"
+          required
+        />
+        <label for="email">Email</label>
+      </div>
 
-    <div *ngIf="passwordMismatch" style="color:red; margin-bottom:10px;">
-      Passwords do not match.
-    </div>
+      <div class="input-group">
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="newUser.name"
+          name="confirmPassword"
+          required
+        >
+        <label for="name">Name</label>
+      </div>
 
-    <button type="submit" [disabled]="passwordMismatch">Register</button>
-  </form>
-  <p (click)="login()">Already have Account? <a>Login here</a></p>
+      <!-- Password -->
+      <div class="input-group">
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="newUser.password"
+          name="password"
+          required
+        />
+        <label for="password">Password</label>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="input-group">
+        <input
+          id="confirmPassword"
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+        <label for="confirmPassword">Confirm Password</label>
+      </div>
+      <!-- Error Message -->
+      <div *ngIf="passwordMismatch" class="error-message">
+        Passwords do not match.
+      </div>
+
+      <button type="submit" [disabled]="passwordMismatch">Register</button>
+    </form>
+
+    <p class="register-text">
+      Already have an account?
+      <a (click)="login()">Login here</a>
+    </p>
+  </div>
 </div>
-

@@ -32,6 +32,11 @@
     <input type="number" class="form-control" [(ngModel)]="newProduct.price" name="price" placeholder="Enter price">
   </div>
 
+   <div class="mb-3">
+    <label class="form-label">Size</label>
+    <input type="size" class="form-control" [(ngModel)]="newProduct.size" name="size" placeholder="Enter size (e.g.Length.Height) ">
+  </div>
+
   <div class="mb-3">
     <label class="form-label">Enter Image Here</label>
   <input class="form-control" type="file" name="image" (change)="onFileSelected($event)" accept="image/*" required>

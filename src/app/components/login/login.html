@@ -1,16 +1,29 @@
-<div class="auth-container">
-  <h2>Login</h2>
-  <form (ngSubmit)="login()">
-    <input type="email" [(ngModel)]="loginData.email" name="email" placeholder="Email" required />
-    <input type="password" [(ngModel)]="loginData.password" name="password" placeholder="Password" required />
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <h2>Welcome Back 👋</h2>
+    <p class="subtitle">Please log in to continue</p>
 
-    <div *ngIf="errorMessage" style="color:red; margin-bottom:10px;">
-      {{ errorMessage }}
-    </div>
+    <form (ngSubmit)="login()">
+      <div class="input-group">
+        <input type="email" [(ngModel)]="loginData.email" name="email" required />
+        <label>Email</label>
+      </div>
 
-    <button type="submit">Login</button>
-  </form>
+      <div class="input-group">
+        <input type="password" [(ngModel)]="loginData.password" name="password" required />
+        <label>Password</label>
+      </div>
 
-  <p (click)="reg()">Don't have an account? <a>Register here</a></p>
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p class="register-text">
+      Don't have an account?
+      <a (click)="reg()">Register here</a>
+    </p>
+  </div>
 </div>
-

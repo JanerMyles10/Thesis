@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 export class Register {
   newUser = {
     email: '',
-    password: ''
+    password: '',
+    name: ''
   };
 
   confirmPassword = '';
@@ -22,7 +23,6 @@ export class Register {
   constructor(private http: HttpClient, private router: Router) {}
 
   register() {
-    // check if passwords match
     if (this.newUser.password !== this.confirmPassword) {
       this.passwordMismatch = true;
       return;

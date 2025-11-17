@@ -8,5 +8,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './sellerpage.css',
 })
 export class Sellerpage {
-
+  
 }
