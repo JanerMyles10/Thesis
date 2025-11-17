@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 // Register user
 router.post('/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save new user with hashed password
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ email, name, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ message: 'Registration successful' });
@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
 
     if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
-    res.json({ message: "Login successful", userId: user._id });
+    res.json({ message: "Login successful", userId: user._id, name:user.name,});
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

@@ -4,13 +4,12 @@ const Product = require("../model/product");
 const multer = require("multer");
 const path = require("path");
 
-// configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../uploads")); // save to /uploads folder
+    cb(null, path.join(__dirname, "../uploads")); 
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // unique filename
+    cb(null, Date.now() + path.extname(file.originalname)); 
   }
 });
 
