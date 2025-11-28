@@ -17,21 +17,23 @@ export class Login {
   constructor(private http: HttpClient, private router: Router) {}
 
   login() {
-    this.http.post<any>('http://localhost:5000/api/reg/login', this.loginData).subscribe({
-      next: (res) => {
-        alert(res.message);
+  this.http.post<any>('http://localhost:5000/api/reg/login', this.loginData).subscribe({
+    next: (res) => {
+      localStorage.setItem('userLoggedIn', 'true');
+      localStorage.setItem('userEmail', this.loginData.email);
+      localStorage.setItem('name', res.name);
 
-        localStorage.setItem('userLoggedIn', 'true');
-        localStorage.setItem('userEmail', this.loginData.email);
-        localStorage.setItem('name', res.name);
+      // Remove guest cart if it exists
+      localStorage.removeItem('guestId');
 
-        this.router.navigate(['/homeprod']);
-      },
-      error: (err) => {
-        this.errorMessage = err.error.message || 'Login failed';
-      }
-    });
-  }
+      this.router.navigate(['/homeprod']);
+    },
+    error: (err) => {
+      this.errorMessage = err.error.message || 'Login failed';
+    }
+  });
+}
+
 
   reg(){
      this.router.navigate(['/reg']);

@@ -33,7 +33,6 @@ export class Register {
     this.http.post('http://localhost:5000/api/reg/register', this.newUser)
       .subscribe({
         next: (res: any) => {
-          alert(res.message || 'Registration successful!');
           this.router.navigate(['/login']);
         },
         error: (err) => {

@@ -11,7 +11,7 @@
   overflow: hidden;               /* Hides overflowing text */
   border-right: 3px solid white;  /* Blinking cursor */
   white-space: nowrap;            /* Keep text on one line */
-  width: 0;                       /* Start hidden */
+  width: 0;                       
   margin: 0 auto;
   animation: typingLoop 6s steps(25) infinite, blink 0.7s step-end infinite;
 }
@@ -249,7 +249,7 @@
     width: 0;
   }
   40% {
-    width: 25ch; 
+    width: 25ch;
   }
   60% {
     width: 25ch;

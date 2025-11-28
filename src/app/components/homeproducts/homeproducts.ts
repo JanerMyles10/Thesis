@@ -17,7 +17,7 @@ export class Homeproducts implements OnInit {
   products: any[] = [];
   cartCount = 0;
   searchTerm: string = '';
-  userEmail: string | null = null;
+  userId: string | null = null;
   name: string |  null = null;
   selectedProduct: any = null;
   selectedQuantity: number = 1;
@@ -39,7 +39,7 @@ export class Homeproducts implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail');
+    this.userId = localStorage.getItem('userId');
     this.name = localStorage.getItem('name');
 
     // ✅ Load products from backend
@@ -53,9 +53,9 @@ export class Homeproducts implements OnInit {
     });
   }
 
-  // ✅ Show modal for Add to Cart (asks for quantity)
+
   addToCart(product: any) {
-    this.selectedProduct = product;
+    this.selectedProduct = { ...product }; // Create a copy
     this.selectedQuantity = 1; // reset quantity each time
 
     const modal = new bootstrap.Modal(
@@ -71,12 +71,23 @@ export class Homeproducts implements OnInit {
         ...this.selectedProduct,
         quantity: this.selectedQuantity
       };
-      this.cartService.addToCart(productToAdd);
 
-      // Hide modal
-      const modalEl = document.getElementById('addToCartModal');
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      modal.hide();
+      // ✅ Subscribe to the Observable to actually add to cart
+      this.cartService.addToCart(productToAdd).subscribe({
+        next: (items: any[]) => {
+          console.log('Product added to cart!', items);
+
+          // Hide modal
+          const modalEl = document.getElementById('addToCartModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal?.hide();
+
+        },
+        error: (err: any) => {
+          console.error('Error adding to cart:', err);
+          alert('Failed to add product to cart. Please try again.');
+        }
+      });
     }
   }
 
@@ -101,13 +112,7 @@ export class Homeproducts implements OnInit {
   }
 
   openSettings() {
-  const modal = new bootstrap.Modal(document.getElementById('settingsModal')!);
-  modal.show();
-}
-
-saveSettings() {
-  console.log('Settings saved:', this.userEmail);
-  // You can send this to backend later
-}
-
+    const modal = new bootstrap.Modal(document.getElementById('settingsModal')!);
+    modal.show();
+  }
 }

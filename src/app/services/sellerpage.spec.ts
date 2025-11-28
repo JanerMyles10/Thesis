@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Sellerpage } from './sellerpage';
+import { Sellerpage } from '../components/sellerpage/sellerpage';
 
 describe('Sellerpage', () => {
   let service: Sellerpage;

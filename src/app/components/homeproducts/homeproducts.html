@@ -24,6 +24,7 @@
 
     <div class="user-dropdown">
       <a routerLink="/mypurchases"><i class="fa-solid fa-money-check-dollar"></i>My Purchases</a>
+      <a routerLink="/seller"><i class="fa-solid fa-user"></i>Seller Page</a>
       <a href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
   </div>
@@ -38,7 +39,7 @@
          <span class="badges" *ngIf="i === 0"><small>New</small></span>
       </div>
       <div class="meta">
-        <div class="artisanname">Artisan Name</div>
+        <div class="artisanname">{{ product.uploadedname?.name }}</div>
         <div class="productname">{{ product.name }}</div>
         <div class="price-row">
           <div class="price">₱{{ product.price }}</div>
@@ -53,7 +54,7 @@
 </div>
 
 <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="viewProductModalLabel">{{ selectedProduct?.name }}</h5>
@@ -79,7 +80,7 @@
 </div>
 
 <div class="modal fade" id="addToCartModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content p-3">
       <div class="modal-header">
         <h5 class="modal-title">Add to Cart</h5>

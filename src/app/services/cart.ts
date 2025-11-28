@@ -1,74 +1,113 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
+  private apiUrl = 'http://localhost:5000/api'; // backend URL
   private cartItems: any[] = [];
+
+  // Reactive subjects
+  private cartItemsSubject = new BehaviorSubject<any[]>([]);
+  cartItems$ = this.cartItemsSubject.asObservable();
+
   private cartCount = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCount.asObservable();
 
-  constructor() {
-    this.loadCart();
+  constructor(private http: HttpClient) {
+    this.loadCart(); // load cart on service init
   }
 
-  // 🔑 Get a unique cart key per user
-  private getCartKey(): string {
-    const user = {
-      id: localStorage.getItem('userEmail') // 👈 using userEmail as ID since you don’t have user._id saved
-    };
-    return user && user.id ? `cart_${user.id}` : 'cart_guest';
-  }
+  // Get user ID: logged-in email or guest ID
+  private getUserId(): string {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) return userEmail;
 
-  // 🧠 Load cart based on logged-in user
-  private loadCart() {
-    const key = this.getCartKey();
-    const savedCart = localStorage.getItem(key);
-    this.cartItems = savedCart ? JSON.parse(savedCart) : [];
-    this.updateCount();
-  }
-
-  // 💾 Save cart to correct key
-  private saveCart() {
-    const key = this.getCartKey();
-    localStorage.setItem(key, JSON.stringify(this.cartItems));
-  }
-
-  addToCart(product: any) {
-    const existing = this.cartItems.find(item => item._id === product._id);
-    if (existing) {
-      existing.quantity += product.quantity;
-    } else {
-      this.cartItems.push(product);
+    let guestId = localStorage.getItem('guestId');
+    if (!guestId) {
+      guestId = 'guest-' + Math.random().toString(36).substring(2, 10);
+      localStorage.setItem('guestId', guestId);
     }
-    this.saveCart();
-    this.updateCount();
+    return guestId;
   }
 
-  getCartItems() {
-    return this.cartItems;
+  // Load cart from backend
+  loadCart(): void {
+    const userId = this.getUserId();
+    this.http.get<any[]>(`${this.apiUrl}/cart/${userId}`).subscribe({
+      next: (items) => {
+        this.cartItems = items;
+        this.cartItemsSubject.next(this.cartItems); // emit to subscribers
+        this.updateCount();
+      },
+      error: (err) => console.error('Error loading cart:', err)
+    });
   }
 
-  removeFromCart(item: any) {
-    this.cartItems = this.cartItems.filter(p => p._id !== item._id);
-    this.saveCart();
-    this.updateCount();
+  // Add item to cart
+  addToCart(product: any): Observable<any[]> {
+    const userId = this.getUserId();
+    return this.http.post<any[]>(`${this.apiUrl}/cart/${userId}`, product)
+      .pipe(
+        tap(items => {
+          this.cartItems = items;
+          this.cartItemsSubject.next(this.cartItems);
+          this.updateCount();
+        })
+      );
   }
 
-  clearCart() {
-    this.cartItems = [];
-    this.saveCart();
-    this.updateCount();
+  // Remove item from cart
+ removeFromCart(item: any): Observable<any[]> {
+  const userId = this.getUserId();
+  return this.http.delete<any[]>(`${this.apiUrl}/cart/${userId}/${item.productId}`)
+    .pipe(
+      tap(items => {
+        this.cartItems = items;
+        this.cartItemsSubject.next(this.cartItems);
+        this.updateCount();
+      })
+    );
+}
+
+
+  // Update quantity
+  updateQuantity(productId: string, quantity: number): Observable<any[]> {
+    const userId = this.getUserId();
+    return this.http.patch<any[]>(`${this.apiUrl}/cart/${userId}/${productId}`, { quantity })
+      .pipe(
+        tap(items => {
+          this.cartItems = items;
+          this.cartItemsSubject.next(this.cartItems);
+          this.updateCount();
+        })
+      );
   }
 
-  private updateCount() {
+  // Clear cart
+  clearCart(): Observable<any[]> {
+    const userId = this.getUserId();
+    return this.http.delete<any[]>(`${this.apiUrl}/cart/${userId}`)
+      .pipe(
+        tap(items => {
+          this.cartItems = items;
+          this.cartItemsSubject.next(this.cartItems);
+          this.updateCount();
+        })
+      );
+  }
+
+  // Update total count
+  private updateCount(): void {
     const totalItems = this.cartItems.reduce((sum, i) => sum + i.quantity, 0);
     this.cartCount.next(totalItems);
   }
 
-  // Call this after login/logout to refresh
-  refreshCart() {
+  // Refresh cart from backend (e.g., after login)
+  refreshCart(): void {
     this.loadCart();
   }
 }

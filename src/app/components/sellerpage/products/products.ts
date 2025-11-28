@@ -24,7 +24,6 @@ export class Products {
     }
   }
 
-  // save product to backend
  saveProduct() {
   if (!this.newProduct.name || !this.newProduct.price) {
     alert('Please fill in product name and price');
@@ -47,4 +46,6 @@ export class Products {
     }
   });
 }
+
+
 }
