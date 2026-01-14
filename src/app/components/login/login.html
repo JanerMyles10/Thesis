@@ -1,0 +1,57 @@
+<!-- This main wrapper centers the card and provides the background -->
+<div class="login-wrapper">
+
+  <!-- This is the white card that contains all the form elements -->
+  <div class="login-card">
+    
+    <!-- Header Section with Title and Subtitle -->
+    <div class="login-header">
+      <h2>Welcome Back 👋</h2>
+      <p>Please enter your details to log in.</p>
+    </div>
+
+    <!-- 
+      The Login Form
+      - (ngSubmit)="login()" calls the 'login' function in your login.ts file when the form is submitted.
+    -->
+    <form (ngSubmit)="login()">
+
+      <!-- Email Input Group -->
+      <div class="input-group">
+        <!-- 
+          - [(ngModel)] binds this input to the 'loginData.email' property.
+          - The 'placeholder=" "' is a trick to make the floating label animation work correctly.
+        -->
+        <input type="email" id="email" [(ngModel)]="loginData.email" name="email" placeholder=" " required />
+        <label for="email">Email Address</label>
+      </div>
+
+      <!-- Password Input Group -->
+      <div class="input-group">
+        <input type="password" id="password" [(ngModel)]="loginData.password" name="password" placeholder=" " required />
+        <label for="password">Password</label>
+      </div>
+
+      <!-- 
+        Error Message Display
+        - *ngIf="errorMessage" makes this div appear only when 'errorMessage' has a value.
+      -->
+      <div *ngIf="errorMessage" class="error-message">
+        <i class="fas fa-exclamation-circle"></i> <!-- Optional: Font Awesome icon -->
+        {{ errorMessage }}
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn">Log In</button>
+    </form>
+
+    <!-- Footer with a link to the registration page -->
+    <div class="form-footer">
+      <p>
+        Don't have an account?
+        <!-- (click)="reg()" calls the 'reg' function in your login.ts file -->
+        <a (click)="reg()">Register here</a>
+      </p>
+    </div>
+  </div>
+</div>

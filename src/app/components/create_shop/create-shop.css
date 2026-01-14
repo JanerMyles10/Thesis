@@ -1,0 +1,205 @@
+:host {
+  display: block;
+  /* Use a subtle background color that complements your main background */
+  background-color: #f4f6f8; 
+  padding: 4rem 1rem;
+  min-height: 100vh;
+}
+
+.create-shop-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.form-header .fa-store {
+  font-size: 3rem;
+  color: var(--primary-color, #6a11cb); /* Use your app's primary color */
+  margin-bottom: 1rem;
+}
+
+.form-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.form-header p {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #6a11cb);
+  box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.15);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.submit-btn:hover {
+  opacity: 0.9;
+}
+/* Add this to your create-shop.component.css */
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.section-title:first-of-type {
+  margin-top: 0;
+}
+
+.upload-note {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: -0.25rem;
+  margin-bottom: 0.75rem;
+}
+.notification-container {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  background-color: #ffffff;
+  border-radius: 12px; /* Softer corners */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  padding: 20px 25px; /* More padding */
+  border-left: 6px solid #ccc;
+  z-index: 2000;
+
+  min-width: 350px; /* --- Make it bigger --- */
+  max-width: 450px;
+
+  /* --- The new, cooler animation setup --- */
+  opacity: 0;
+  transform: translateX(110%) scale(0.9) rotate(3deg); /* Start further away, smaller, and tilted */
+  transform-origin: center right; /* Pivot the rotation from the right side */
+  visibility: hidden;
+  /* --- The bouncy animation --- */
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* A "springy" transition */
+}
+
+/* This class triggers the pop-in animation */
+.notification-container.show {
+  opacity: 1;
+  transform: translateX(0) scale(1) rotate(0deg); /* End in the final position */
+  visibility: visible;
+}
+
+/* --- Style for the icon container --- */
+.notification-icon {
+  margin-right: 20px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Icon for Success (a CSS checkmark) --- */
+.notification-container.success .notification-icon::before {
+  content: '';
+  width: 8px;
+  height: 16px;
+  border: solid #4CAF50; /* Green */
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
+}
+
+
+.notification-container.error .notification-icon {
+  position: relative;
+}
+.notification-container.error .notification-icon::before,
+.notification-container.error .notification-icon::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 4px;
+  background-color: #F44336; /* Red */
+  border-radius: 2px;
+}
+.notification-container.error .notification-icon::before {
+  transform: rotate(45deg);
+}
+.notification-container.error .notification-icon::after {
+  transform: rotate(-45deg);
+}
+
+
+.notification-message {
+  flex-grow: 1;
+  font-size: 1.05rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  font-weight: 300;
+  color: #999;
+  cursor: pointer;
+  margin-left: 25px;
+  padding: 0 5px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #111;
+}

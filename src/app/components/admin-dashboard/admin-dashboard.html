@@ -1,0 +1,69 @@
+<div class="dashboard-layout">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-user-shield"></i>
+      <h3>Admin Panel</h3>
+    </div>
+    <nav class="sidebar-nav">
+      <!-- 'routerLinkActive' highlights the current page -->
+      <a routerLink="/admin-dashboard" routerLinkActive="active">
+        <i class="fas fa-users-cog"></i> 
+        <span>User Management</span>
+      </a>
+      <a routerLink="/admin-shop-app" routerLinkActive="active">
+        <i class="fas fa-store-alt"></i> 
+        <span>Shop Approvals</span>
+      </a>
+       <a routerLink="/admin-shops" routerLinkActive="active">
+    <i class="fas fa-store"></i> 
+    <span>Manage Shops</span>
+  </a>
+    </nav>
+    <div class="sidebar-footer">
+    <a (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </a>
+  </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    
+    <header class="page-header">
+      <h1>User Management</h1>
+      <p>View and manage roles for all users in the system.</p>
+    </header>
+
+    <div class="card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <select [value]="user.role" (change)="onRoleChange(user, $event)">
+                  <option value="user">User</option>
+                  <option value="seller">Seller</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </td>
+            </tr>
+            <tr *ngIf="users.length === 0">
+              <td colspan="3" class="no-users-message">No users found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

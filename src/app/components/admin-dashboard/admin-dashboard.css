@@ -1,0 +1,192 @@
+/* ============================================= */
+/* ===== Overall Layout and Host Styling ====== */
+/* ============================================= */
+
+:host {
+  display: block;
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+
+/* ============================================= */
+/* =========== Sidebar Navigation ============== */
+/* ============================================= */
+
+.sidebar {
+  width: 260px;
+  background-color: #1e293b; /* Dark Slate */
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0; /* Prevents sidebar from shrinking */
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  border-bottom: 1px solid #334155;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 1rem 1.5rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.sidebar-nav a:hover {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+.sidebar-nav a.active {
+  background-color: #0f172a;
+  color: #ffffff;
+  border-left-color: #6366f1; /* Your primary color */
+}
+
+.sidebar-nav a i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+
+/* ============================================= */
+/* ========== Main Content Area =============== */
+/* ============================================= */
+
+.main-content {
+  flex-grow: 1;
+  background-color: #f1f5f9; /* Light Gray */
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+}
+
+
+/* ============================================= */
+/* ========== User Management Card ============= */
+/* ============================================= */
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0; /* Padding will be on the inner elements */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Ensures the border-radius applies to the table */
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+thead th {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #475569;
+  background-color: #f8fafc;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  min-width: 120px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #6366f1; /* Your primary color */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.no-users-message {
+  text-align: center;
+  color: #94a3b8;
+  padding: 2.5rem;
+  font-style: italic;
+}
+.sidebar-nav {
+  flex-grow: 1;
+}
+
+/* The container for the logout button */
+.sidebar-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #334155; /* A separator line */
+}
+
+/* Styling the logout link itself */
+.sidebar-footer a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0.5rem; /* A little padding inside the container */
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* A nice hover effect, using red to signify a "final" action */
+.sidebar-footer a:hover {
+  background-color: #ef4444; /* Red color */
+  color: #ffffff;
+}

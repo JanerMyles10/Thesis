@@ -1,0 +1,101 @@
+<div class="dashboard-layout">
+  <!-- Sidebar (Manually copied or you can create a Shared Component later) -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-user-shield"></i>
+      <h3>Admin Panel</h3>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="/admin-dashboard">
+        <i class="fas fa-users-cog"></i> <span>User Management</span>
+      </a>
+      <a routerLink="/admin-shop-app">
+        <i class="fas fa-file-signature"></i> <span>Shop Applications</span>
+      </a>
+      <!-- Active link -->
+      <a routerLink="/admin-shops" class="active">
+        <i class="fas fa-store"></i> <span>Manage Shops</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+    <a (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </a>
+  </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="page-header">
+      <h1>Active Shops Management</h1>
+      <p>Boost listings or disable shops that violate policies.</p>
+    </header>
+
+    <div class="card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Shop Name</th>
+              <th>Owner</th>
+              <th>Status</th>
+              <th>Boosted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let shop of shops">
+              <td>
+                <div class="fw-bold">{{ shop.shopName }}</div>
+                <small class="text-muted">{{ shop.shopTagline }}</small>
+              </td>
+              <td>{{ shop.fullName }}</td>
+              
+              <!-- Status Badge -->
+              <td>
+                <span [class]="shop.status === 'Approved' ? 'badge-success' : 'badge-danger'">
+                  {{ shop.status }}
+                </span>
+              </td>
+
+              <!-- Boost Status -->
+              <td>
+                <span *ngIf="shop.isBoosted" class="badge-boost">
+                    <i class="fas fa-bolt"></i> Boosted
+                </span>
+                <span *ngIf="!shop.isBoosted" class="text-muted small">Normal</span>
+              </td>
+
+              <!-- Actions Buttons -->
+              <td class="actions-cell">
+                <!-- Boost Button -->
+                <button 
+                  class="btn-action btn-boost" 
+                  [class.active]="shop.isBoosted"
+                  (click)="toggleBoost(shop)"
+                  title="Boost Listing">
+                  <i class="fas fa-bolt"></i> {{ shop.isBoosted ? 'Unboost' : 'Boost' }}
+                </button>
+
+                <!-- Disable Button -->
+                <button 
+                  class="btn-action btn-disable" 
+                  [class.disabled-style]="shop.status === 'Disabled'"
+                  (click)="toggleShopStatus(shop)"
+                  title="Disable Shop">
+                  <i class="fas" [class.fa-ban]="shop.status === 'Approved'" [class.fa-check]="shop.status === 'Disabled'"></i>
+                  {{ shop.status === 'Approved' ? 'Disable' : 'Enable' }}
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="shops.length === 0">
+              <td colspan="5" class="no-users-message">No active shops found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

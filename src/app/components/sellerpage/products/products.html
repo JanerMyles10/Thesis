@@ -1,0 +1,178 @@
+<div class="container-fluid p-4">
+  
+  <!-- 1. DASHBOARD HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark m-0">My Inventory</h3>
+      <p class="text-muted small m-0">Manage your product listings</p>
+    </div>
+    <button type="button" class="btn btn-primary d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
+      <i class="fas fa-plus"></i> Add New Product
+    </button>
+  </div>
+
+  <!-- 2. EMPTY STATE (Shows if no products exist) -->
+  <div *ngIf="sellerProducts.length === 0" class="text-center py-5 bg-light rounded-3 border border-dashed">
+    <div class="mb-3 text-muted opacity-50">
+      <i class="fas fa-box-open fa-4x"></i>
+    </div>
+    <h5 class="fw-bold text-muted">No products yet</h5>
+    <p class="small text-muted mb-4">Start selling by adding your first item.</p>
+    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
+      Add Product Now
+    </button>
+  </div>
+
+  <!-- 3. PRODUCT GRID (Shows your products) -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4" *ngIf="sellerProducts.length > 0">
+    
+    <div class="col" *ngFor="let product of sellerProducts">
+      <div class="card h-100 border-0 shadow-sm product-card">
+        
+        <!-- Product Image -->
+        <div class="card-img-top position-relative bg-light d-flex align-items-center justify-content-center overflow-hidden" style="height: 200px;">
+          <img 
+            [src]="product.imageUrl || 'assets/placeholder.png'" 
+            class="w-100 h-100" 
+            style="object-fit: cover;" 
+            alt="Product Image"
+          >
+          <div class="overlay">
+  <!-- View/Edit Button -->
+  <button class="btn btn-light btn-sm rounded-circle me-2 shadow" title="Edit Product" (click)="openEditModal(product)">
+    <i class="fas fa-pen text-primary"></i>
+  </button>
+  
+  <!-- Delete Button -->
+  <button class="btn btn-light btn-sm rounded-circle shadow" title="Delete Product" (click)="deleteProduct(product._id)">
+    <i class="fas fa-trash text-danger"></i>
+  </button>
+</div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+          <h6 class="card-title fw-bold text-truncate" [title]="product.name">{{ product.name }}</h6>
+          <p class="card-text text-primary fw-bold">₱{{ product.price }}</p>
+          <p class="card-text text-muted small text-truncate">{{ product.description }}</p>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="card-footer bg-white border-0 pt-0 pb-3">
+          <small class="text-muted"><i class="far fa-clock me-1"></i> Listed recently</small>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ============================================== -->
+<!-- ADD PRODUCT MODAL (Kept logic, improved UI) -->
+<!-- ============================================== -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold"><i class="fas fa-box me-2"></i> Add New Product</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form #productForm="ngForm">
+          
+          <!-- Image Upload Preview -->
+          <div class="mb-4 text-center">
+             <label class="d-block p-4 border border-dashed rounded bg-light cursor-pointer position-relative hover-effect">
+                <input type="file" class="d-none" name="image" (change)="onFileSelected($event)" accept="image/*">
+                <div *ngIf="!newProduct.image">
+                  <i class="fas fa-cloud-upload-alt fs-2 text-primary mb-2"></i>
+                  <p class="small text-muted mb-0">Click to upload product image</p>
+                </div>
+                <div *ngIf="newProduct.image" class="text-success fw-bold">
+                  <i class="fas fa-check-circle me-1"></i> Image Selected: {{ newProduct.image.name }}
+                </div>
+             </label>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">Product Name</label>
+            <input type="text" class="form-control bg-light border-0" [(ngModel)]="newProduct.name" name="name" placeholder="e.g. Woven Basket" required>
+          </div>
+
+          <div class="row">
+            <div class="col-6 mb-3">
+              <label class="form-label small fw-bold text-muted">Price (₱)</label>
+              <input type="number" class="form-control bg-light border-0" [(ngModel)]="newProduct.price" name="price" placeholder="0.00" required>
+            </div>
+            <div class="col-6 mb-3">
+              <label class="form-label small fw-bold text-muted">Size / Dimensions</label>
+              <input type="text" class="form-control bg-light border-0" [(ngModel)]="newProduct.size" name="size" placeholder="e.g. 10x10 cm">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">Description</label>
+            <textarea class="form-control bg-light border-0" [(ngModel)]="newProduct.description" name="description" rows="3" placeholder="Describe materials, process, etc..."></textarea>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer border-0 pt-0 pb-4 px-4">
+        <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary px-4 fw-bold" (click)="saveProduct()">Save Product</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i> Edit Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form *ngIf="productToEdit">
+          
+          <!-- Current Image Preview -->
+          <div class="text-center mb-3">
+            <img [src]="productToEdit.imageUrl" class="rounded shadow-sm mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+            <p class="small text-muted">Current Image</p>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Product Name</label>
+            <input type="text" class="form-control" [(ngModel)]="productToEdit.name" name="editName">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Price</label>
+            <input type="number" class="form-control" [(ngModel)]="productToEdit.price" name="editPrice">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Update Image (Optional)</label>
+            <input type="file" class="form-control" (change)="onEditFileSelected($event)">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Description</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="productToEdit.description" name="editDesc"></textarea>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning fw-bold" (click)="saveEditedProduct()">Update Changes</button>
+      </div>
+    </div>
+  </div>
+</div>

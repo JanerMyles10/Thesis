@@ -1,0 +1,144 @@
+/* Import a nice font from Google Fonts (optional, but recommended) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Main wrapper to center the card and apply the background */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Poppins', sans-serif;
+  padding: 1rem;
+}
+
+/* The white card container */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  /* Animation for when the card loads */
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+/* Header section styling */
+.login-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.login-header p {
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+/* --- Floating Label Input Styles --- */
+.input-group {
+  position: relative;
+  margin-bottom: 1.75rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 15px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  background-color: transparent; /* Important for label transition */
+  transition: border-color 0.3s ease;
+}
+
+.input-group label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  background-color: #ffffff; /* Same as card background */
+  padding: 0 5px;
+  transition: all 0.3s ease;
+  pointer-events: none; /* Allows clicks to pass through to the input */
+}
+
+/* The magic for the floating label effect */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: 0;
+  left: 10px;
+  font-size: 0.8rem;
+  color: #6366f1; /* Your primary color */
+}
+
+.input-group input:focus {
+  border-color: #6366f1; /* Your primary color */
+}
+
+/* Error message styling */
+.error-message {
+  color: #ef4444; /* Red for errors */
+  background-color: rgba(239, 68, 68, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Submit button styling */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #6366f1, #8b5cf6);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px); /* Slight lift on hover */
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+/* Footer link to register page */
+.form-footer {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.form-footer a {
+  color: #6366f1;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Fade-in animation for the card */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

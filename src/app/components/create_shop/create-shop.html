@@ -1,0 +1,63 @@
+<div class="create-shop-container">
+     <div class="notification-container" 
+     [class.show]="notification.show" 
+     [class.success]="notification.type === 'success'" 
+     [class.error]="notification.type === 'error'">
+  
+  <div class="notification-icon"></div>
+
+  <div class="notification-message">
+    {{ notification.message }}
+  </div>
+  <button class="close-btn" (click)="hideNotification()">&times;</button>
+</div>
+
+  <div class="form-card">
+    <div class="form-header">
+      <i class="fas fa-store"></i>
+      <h1>Become a Seller</h1>
+      <p>Fill out the details below to open your shop. Your information will be manually reviewed for verification.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <h2 class="section-title">Shop Details</h2>
+      <div class="form-group">
+        <label for="shopName">Shop Name</label>
+        <input type="text" id="shopName" [(ngModel)]="shopDetails.shopName" name="shopName" placeholder="e.g., Andy's Woodcrafts" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="shopTagline">Shop Tagline (Optional)</label>
+        <input type="text" id="shopTagline" [(ngModel)]="shopDetails.shopTagline" name="shopTagline" placeholder="e.g., Quality Handmade Goods">
+      </div>
+
+      <div class="form-group">
+        <label for="shopDescription">Shop Description</label>
+        <textarea id="shopDescription" rows="4" [(ngModel)]="shopDetails.shopDescription" name="shopDescription" placeholder="Tell customers the story of your shop and what you sell." required></textarea>
+      </div>
+      <h2 class="section-title">Personal Verification</h2>
+      <div class="form-group">
+        <label for="fullName">Your Full Name</label>
+        <input type="text" id="fullName" [(ngModel)]="shopDetails.fullName" name="fullName" placeholder="As it appears on your ID" required>
+      </div>
+
+       <div class="form-group">
+        <label for="address">Full Address</label>
+        <input type="text" id="address" [(ngModel)]="shopDetails.address" name="address" placeholder="Street, Barangay, City, Province (Cebu)" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number / Business Number</label>
+        <input type="tel" id="phoneNumber" [(ngModel)]="shopDetails.phoneNumber" name="phoneNumber" placeholder="09XX-XXX-XXXX" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nationalId">Upload National ID</label>
+        <p class="upload-note">For verification purposes only. This is required for sellers in Cebu.</p>
+        <input type="file" id="nationalId" (change)="onFileSelected($event)" accept="image/png, image/jpeg" required>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit for Review</button>
+    </form>
+  </div>
+</div>

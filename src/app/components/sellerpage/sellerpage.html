@@ -1,0 +1,62 @@
+<div class="dashboard-layout">
+  
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar">
+    <div class="logo-area">
+      <i class="fa-solid fa-shop"></i>
+      <h2>Seller Center</h2>
+    </div>
+
+    <nav class="nav-links">
+      <a routerLink="dash" routerLinkActive="active" class="nav-item">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <a routerLink="prod" routerLinkActive="active" class="nav-item">
+        <i class="fa-brands fa-product-hunt"></i>
+        <span>Products</span>
+      </a>
+
+      <a routerLink="orders" routerLinkActive="active" class="nav-item">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>Orders</span>
+      </a>
+
+      <a routerLink="report" routerLinkActive="active" class="nav-item">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a routerLink="logout" class="nav-item logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="main-content">
+    
+    <!-- TOP HEADER -->
+    <header class="top-bar">
+      <h3>Overview</h3>
+      <div class="header-actions">
+        <button class="home-btn" routerLink="/homeprod">
+          <i class="fa-solid fa-house"></i> Go to Homepage
+        </button>
+        <div class="profile-icon">
+          <i class="fa-solid fa-user"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- DYNAMIC CONTENT (Your pages load here) -->
+    <div class="content-body">
+      <router-outlet></router-outlet>
+    </div>
+
+  </main>
+</div>

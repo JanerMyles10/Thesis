@@ -1,0 +1,405 @@
+<!-- ✅ 1. OPEN WRAPPER HERE -->
+<div class="page-wrapper">
+
+  <!-- TOP HEADER & NAV -->
+  <div class="container-fluid top-header">
+    <div class="logo">
+      <h1>Maker's Magic ✨</h1>
+    </div>
+  </div>
+
+  <div class="sticky-nav">
+    <div class="nav-container">
+      <div class="user-menu">
+        <div class="user-toggle">
+          <i class="fas fa-user-circle" style="font-size: 1.5rem; margin-right: 5px;"></i>
+          <span>{{ name || 'Guest' }}</span> <i class="fas fa-caret-down"></i>
+        </div>
+        <div class="user-dropdown">
+          <a routerLink="/profile"><i class="fas fa-user-circle"></i> My Profile</a>
+          <a routerLink="/mypurchases"><i class="fas fa-money-check-dollar"></i> My Purchases</a>
+          <a *ngIf="isSeller" routerLink="/seller/dash"><i class="fas fa-store"></i> Your Shop</a>
+          <a *ngIf="!isSeller" routerLink="/create-shop"><i class="fas fa-store"></i> Create Shop</a>
+          <a href="javascript:void(0)" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input type="text" class="searchTerm" [(ngModel)]="searchTerm" placeholder="Search for handmade treasures...">
+        <button type="submit" class="searchButton">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+
+      <div class="cart-icon" (click)="updateCart()">
+        <div class="icon-wrapper">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        </div>
+        <span class="cart-text">Cart</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO BANNER -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h2>Handcrafted with Love</h2>
+      <p>Support local artisans and find unique gifts.</p>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-layout">
+    
+    <!-- NO PRODUCTS FOUND -->
+    <div *ngIf="filteredProducts.length === 0" class="no-results">
+      <i class="fas fa-search"></i>
+      <h3>No products found</h3>
+      <p>We couldn't find any items matching "{{ searchTerm }}".</p>
+      <button class="btn-clear" (click)="searchTerm = ''">Clear Search</button>
+    </div>
+
+    <!-- PRODUCTS GRID -->
+    <section class="products-grid" *ngIf="filteredProducts.length > 0">
+      <div class="product-card" *ngFor="let product of filteredProducts; let i = index">
+        <div class="card-image">
+           <img [src]="product.imageUrl" [alt]="product.name" />
+           <span class="badge-new" *ngIf="i < 2">New Arrival</span>
+           <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+           <div class="overlay-actions">
+             <button class="btn-quick-view" (click)="viewProduct(product)">
+               <i class="fas fa-eye"></i> Quick Look
+             </button>
+           </div>
+        </div>
+        <div class="card-details">
+          
+          <!-- Dynamic Shop Name -->
+          <small class="artisan-name" style="color: #6c757d; font-weight: 600;">
+            <i class="fas fa-store-alt me-1"></i> {{ product.shopName || 'Artisan Store' }}
+          </small>
+
+          <div class="product-name" [title]="product.name">{{ product.name }}</div>
+          <div class="rating">
+            <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star-half-alt text-warning"></i>
+            <span>(4.5)</span>
+          </div>
+          <div class="price-row">
+            ₱{{ product.price }}
+          </div>
+          <div class="card-bottom-actions">
+             <button class="btn-cart" (click)="addToCart(product)">
+                <i class="fas fa-cart-plus"></i> Add
+             </button>
+             <button class="btn-buy" (click)="openMessageModal(product)">
+                <i class="fas fa-comment-dots"></i> Message
+             </button>
+         </div> 
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 Maker's Magic. Bringing local talent to your home.</p>
+  </footer>
+</div> 
+
+
+<!-- VIEW PRODUCT MODAL -->
+<div class="modal fade" id="viewProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content overflow-hidden border-0 shadow-lg">
+      <div class="modal-body p-0">
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-3 z-index-10" data-bs-dismiss="modal"></button>
+        <div class="row g-0">
+          <!-- LEFT COLUMN: Image + Buttons -->
+          <div class="col-lg-5 bg-light border-end d-flex flex-column">
+            <div class="d-flex align-items-center justify-content-center bg-white position-relative" style="height: 400px; width: 100%;">
+               <img *ngIf="selectedProduct?.imageUrl" [src]="selectedProduct.imageUrl" class="d-block" style="width: 100%; height: 100%; object-fit: contain;" [alt]="selectedProduct.name" />
+            </div>
+            <div class="p-4 bg-light mt-auto border-top">
+              <div class="row g-2">
+                <div class="col-6">
+                   <button class="btn btn-outline-dark w-100 py-3 fw-bold shadow-sm" (click)="addToCart(selectedProduct)">
+                    <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                   </button>
+                </div>
+                <div class="col-6">
+                  <button class="btn btn-primary w-100 py-3 fw-bold shadow-sm" (click)="openMessageModal(selectedProduct)">
+                    <i class="fab fa-facebook-messenger me-2"></i> Message
+                  </button>
+                </div>
+              </div>
+              <div class="text-center mt-3 text-muted small">
+                <i class="fas fa-shield-alt me-1"></i> Chat with Seller &nbsp;•&nbsp; <i class="fas fa-hand-holding-usd me-1"></i> Secure Deal
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Details -->
+          <div class="col-lg-7 d-flex flex-column">
+            <div class="p-4 p-lg-5 pb-0">
+              <div class="d-flex align-items-center mb-2">
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 me-2 px-3 py-2 rounded-pill">Handmade</span>
+                <a href="javascript:void(0)" class="fw-bold text-decoration-none text-dark">
+                  <i class="fas fa-store text-primary me-1"></i> {{ selectedProduct?.shopName || 'The Artisan Store' }}
+                </a>
+              </div>
+              <h2 class="fw-bold mb-2 display-6">{{ selectedProduct?.name }}</h2>
+              <div class="d-flex align-items-center mb-4">
+                <div class="text-warning me-2">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="text-muted small border-end pe-3 me-3">4.8 (124 Reviews)</span>
+                <span class="text-success small fw-bold"><i class="fas fa-check-circle me-1"></i> In Stock</span>
+              </div>
+              <div class="mb-4">
+                <h1 class="text-primary fw-bold display-5">₱{{ selectedProduct?.price }}</h1>
+              </div>
+              <div class="mb-4">
+                <h6 class="fw-bold text-dark text-uppercase small ls-1">About this item</h6>
+                <p class="text-muted" style="line-height: 1.7; font-size: 0.95rem;">
+                  {{ selectedProduct?.description || 'No description available for this product.' }}
+                </p>
+              </div>
+            </div>
+
+            <!-- REVIEWS SECTION -->
+            <div class="mt-auto bg-light border-top p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                 <h6 class="fw-bold mb-0"><i class="fas fa-comments me-2 text-primary"></i> Customer Reviews ({{ selectedProduct?.reviews?.length || 0 }})</h6>
+                 <button class="btn btn-sm btn-dark rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#writeReviewModal">
+                    <i class="fas fa-pen me-1"></i> Write a Review
+                 </button>
+              </div>
+              <div class="reviews-container bg-white border rounded-3 p-3 shadow-sm" style="max-height: 200px; overflow-y: auto;">
+                <div *ngFor="let review of selectedProduct?.reviews" class="d-flex gap-3 mb-3 border-bottom pb-3 last-no-border">
+                   <div class="avatar flex-shrink-0 bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center text-secondary fw-bold" style="width: 40px; height: 40px;">
+                      {{ review.user.charAt(0).toUpperCase() }}
+                   </div>
+                   <div>
+                      <div class="d-flex align-items-center mb-1">
+                        <span class="fw-bold me-2">{{ review.user }}</span>
+                        <div class="text-warning small">
+                           <i class="fas fa-star" *ngFor="let s of [1,2,3,4,5]" [ngClass]="{'text-warning': s <= review.rating, 'text-muted opacity-25': s > review.rating}"></i>
+                        </div>
+                      </div>
+                      <p class="text-muted small mb-0">{{ review.comment }}</p>
+                      <small class="text-muted opacity-50" style="font-size: 0.7rem;">{{ review.date | date:'mediumDate' }}</small>
+                   </div>
+                </div>
+                <div *ngIf="!selectedProduct?.reviews || selectedProduct?.reviews?.length === 0" class="text-center py-4 text-muted">
+                   <p class="mb-0">No reviews yet.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WRITE REVIEW MODAL -->
+<div class="modal fade" id="writeReviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Write a Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <p class="mb-2 text-muted">How was your experience with</p>
+                    <h5 class="fw-bold text-primary">{{ selectedProduct?.shopName || 'this shop' }}</h5>
+                </div>
+                <div class="star-rating text-center mb-4">
+                    <div class="d-flex justify-content-center gap-2 fs-3 text-warning cursor-pointer" style="cursor: pointer;">
+                        <i class="fa-star" [ngClass]="reviewRating >= 1 ? 'fas' : 'far'" (click)="setRating(1)"></i>
+                        <i class="fa-star" [ngClass]="reviewRating >= 2 ? 'fas' : 'far'" (click)="setRating(2)"></i>
+                        <i class="fa-star" [ngClass]="reviewRating >= 3 ? 'fas' : 'far'" (click)="setRating(3)"></i>
+                        <i class="fa-star" [ngClass]="reviewRating >= 4 ? 'fas' : 'far'" (click)="setRating(4)"></i>
+                        <i class="fa-star" [ngClass]="reviewRating >= 5 ? 'fas' : 'far'" (click)="setRating(5)"></i>
+                    </div>
+                    <small class="text-muted mt-2 d-block">{{ reviewRating }}/5 Stars</small>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label small fw-bold">Your Feedback</label>
+                    <textarea class="form-control bg-light border-0" rows="4" [(ngModel)]="reviewText" placeholder="Tell us what you liked about the product..."></textarea>
+                </div>
+                <button class="btn btn-primary w-100 fw-bold py-2" (click)="submitReview()">Submit Review</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ADD TO CART MODAL -->
+<div class="modal fade" id="addToCartModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-0 pt-4 px-4 pb-0">
+        <h5 class="modal-title fw-bold">Select Quantity</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4" *ngIf="selectedProduct">
+        <div class="d-flex gap-3 mb-4">
+            <div class="flex-shrink-0">
+                <img [src]="selectedProduct.imageUrl" class="rounded-3 shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
+            </div>
+            <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                <h5 class="fw-bold mb-1">{{ selectedProduct.name }}</h5>
+                <p class="text-muted small mb-1">{{ selectedProduct.shopName }}</p>
+                <h4 class="text-primary fw-bold mb-0">₱{{ selectedProduct.price }}</h4>
+            </div>
+        </div>
+        <hr class="text-muted opacity-25">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <span class="fw-semibold text-dark">Quantity</span>
+            <div class="quantity-selector d-flex align-items-center border rounded-pill px-2 py-1">
+                <button class="btn btn-sm btn-link text-dark text-decoration-none px-2 no-focus" (click)="selectedQuantity > 1 ? selectedQuantity = selectedQuantity - 1 : null"><i class="fas fa-minus small"></i></button>
+                <input type="number" class="form-control border-0 text-center fw-bold bg-transparent p-0 no-spinners" style="width: 40px;" [(ngModel)]="selectedQuantity" min="1" readonly>
+                <button class="btn btn-sm btn-link text-dark text-decoration-none px-2 no-focus" (click)="selectedQuantity = selectedQuantity + 1"><i class="fas fa-plus small"></i></button>
+            </div>
+        </div>
+        <div class="bg-light p-3 rounded-3 d-flex justify-content-between align-items-center mb-4">
+            <span class="text-muted fw-medium">Total Amount</span>
+            <span class="fs-4 fw-bold text-primary">₱{{ selectedProduct.price * selectedQuantity }}</span>
+        </div>
+        <button class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm action-btn" (click)="confirmAddToCart()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MESSAGE MODAL -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Send seller a message</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="d-flex gap-3 mb-4 align-items-center bg-light p-3 rounded-3">
+           <img *ngIf="selectedProduct?.imageUrl" [src]="selectedProduct.imageUrl" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+           <div>
+              <div class="fw-bold text-dark">{{ selectedProduct?.name }}</div>
+              <div class="text-primary fw-bold">₱{{ selectedProduct?.price }}</div>
+              <small class="text-muted">{{ selectedProduct?.shopName || 'Seller' }}</small>
+           </div>
+        </div>
+        <div class="form-group mb-4">
+          <label class="small fw-bold text-muted mb-2">Your Message</label>
+          <textarea class="form-control bg-light border-0" rows="4" [(ngModel)]="messageText"></textarea>
+          <small class="text-muted" style="font-size: 0.75rem;">Default message sent to seller. You can edit this.</small>
+        </div>
+        <button class="btn btn-primary w-100 py-2 fw-bold rounded-pill" (click)="sendMessage()">
+          <i class="fas fa-paper-plane me-2"></i> Send Message
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING CHAT WIDGET -->
+<div class="chat-widget-container">
+  
+  <!-- 1. THE FLOATING BUTTON -->
+  <button class="chat-toggle-btn shadow-lg position-relative" (click)="toggleChat()">
+    <i class="fas fa-comment-dots"></i>
+    
+    <!-- 🔥 RED NOTIFICATION BADGE -->
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" *ngIf="unreadCount > 0">
+      {{ unreadCount }}
+    </span>
+  </button>
+
+  <!-- 2. THE CHAT BOX -->
+  <div class="chat-box shadow-lg" *ngIf="isChatOpen">
+    
+    <!-- HEADER -->
+    <div class="chat-header bg-primary text-white d-flex justify-content-between align-items-center p-3">
+      <div class="d-flex align-items-center">
+        <!-- Back Button (Visible when chatting) -->
+        <button *ngIf="activeChatUser" class="btn btn-sm btn-link text-white me-2 p-0 text-decoration-none" (click)="backToContacts()">
+          <i class="fas fa-arrow-left fs-5"></i>
+        </button>
+        <!-- Title -->
+        <h6 class="m-0 fw-bold">{{ activeChatUser ? activeChatUser.name : 'Messages' }}</h6>
+      </div>
+      <!-- Close Button -->
+      <button class="btn btn-sm text-white" (click)="toggleChat()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- VIEW A: CONTACTS LIST -->
+    <div class="chat-body p-0 d-flex flex-column" *ngIf="!activeChatUser">
+      <div *ngIf="contactList.length === 0" class="text-center p-4 text-muted mt-5">
+        <i class="far fa-paper-plane fs-1 mb-2"></i>
+        <p class="small">No messages yet.</p>
+      </div>
+
+      <div class="contact-list flex-grow-1 overflow-auto">
+        <div *ngFor="let contact of contactList" class="contact-item p-3 border-bottom d-flex align-items-center cursor-pointer" (click)="openChat(contact)">
+           <div class="avatar shadow-sm rounded-circle d-flex align-items-center justify-content-center me-3 text-white fw-bold" 
+                style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 1.1rem;">
+             {{ contact.initial || 'S' }}
+           </div>
+           <div class="flex-grow-1 overflow-hidden">
+             <div class="d-flex justify-content-between align-items-center mb-1">
+               <h6 class="mb-0 fw-bold text-dark text-truncate" style="max-width: 130px;">{{ contact.name }}</h6>
+               <div class="d-flex flex-column align-items-end">
+                   <small class="text-muted fw-semibold" style="font-size: 0.7rem;">{{ contact.lastMessageTime | date:'shortTime' }}</small>
+                   <span class="badge bg-danger rounded-pill mt-1" style="font-size: 0.6rem;" *ngIf="contact.unread > 0">
+                       {{ contact.unread }}
+                   </span>
+               </div>
+             </div>
+             <p class="text-muted text-truncate mb-0 small" [class.fw-bold]="contact.unread > 0" style="opacity: 0.8;">
+                {{ contact.lastMessage }}
+             </p>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW B: CONVERSATION -->
+    <div class="chat-body d-flex flex-column" *ngIf="activeChatUser">
+      
+      <!-- Messages -->
+      <div class="messages-container" id="msgContainer">
+        <div *ngFor="let msg of currentMessages" class="d-flex flex-column" [ngClass]="{'align-items-end': msg.senderId === currentUserId, 'align-items-start': msg.senderId !== currentUserId}">
+          <div class="message-bubble shadow-sm mb-1" [ngClass]="msg.senderId === currentUserId ? 'my-msg' : 'other-msg'">
+            <div *ngIf="msg.productName" class="mb-2 pb-2 border-bottom border-secondary border-opacity-10 small d-flex gap-2">
+               <img *ngIf="msg.productImage" [src]="msg.productImage" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
+               <span class="fw-bold align-self-center">{{ msg.productName }}</span>
+            </div>
+            <span>{{ msg.messageBody }}</span>
+          </div>
+          <small class="text-muted opacity-50 mb-2" style="font-size: 0.65rem;">
+            {{ msg.timestamp | date:'shortTime' }}
+          </small>
+        </div>
+      </div>
+
+      <!-- 🔥 Input Area (Fixed Alignment) -->
+      <div class="chat-footer d-flex align-items-center gap-2 bg-white border-top p-2">
+        <input type="text" class="form-control rounded-pill bg-light border-0 shadow-none px-3" 
+               placeholder="Type a message..." 
+               [(ngModel)]="replyText" 
+               (keyup.enter)="sendReply()"
+               style="height: 40px;">
+        
+        <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm p-0" 
+                style="width: 40px; height: 40px; flex-shrink: 0;" 
+                (click)="sendReply()">
+          <i class="fas fa-paper-plane" style="font-size: 1rem; margin-left: -2px;"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ✅ 2. CLOSE WRAPPER HERE -->
+<router-outlet></router-outlet>

@@ -1,0 +1,106 @@
+<div class="dashboard-layout">
+  <!-- Sidebar (This is duplicated for consistent layout) -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-user-shield"></i>
+      <h3>Admin Panel</h3>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="/admin-dashboard" routerLinkActive="active">
+        <i class="fas fa-users-cog"></i> 
+        <span>User Management</span>
+      </a>
+      <a routerLink="/admin-approvals" class="active">
+        <i class="fas fa-store-alt"></i> 
+        <span>Shop Approvals</span>
+      </a>
+      <a routerLink="/admin-shops" routerLinkActive="active">
+        <i class="fas fa-store"></i> <span>Manage Shops</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+    <a (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </a>
+  </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <header class="page-header">
+      <h1>Shop Approvals</h1>
+      <p>Review and approve new seller applications.</p>
+    </header>
+    <div class="card">
+      <div class="application-list">
+        <!-- Show this message if the applications array is empty -->
+        <div *ngIf="applications.length === 0" class="no-items-message">
+          No pending applications found.
+        </div>
+        <!-- Loop through the fetched applications and display them -->
+        <button class="application-item" *ngFor="let app of applications" (click)="viewApplicationDetails(app._id)">
+          <div class="item-details">
+            <strong>{{ app.shopName }}</strong>
+            <small>Submitted by: {{ app.fullName }}</small>
+          </div>
+          <!-- We can move the buttons to the modal for a cleaner look -->
+          <div class="item-actions-preview">
+            <span class="view-details-text">View Details <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+<!-- This modal is hidden by default and shows when 'selectedApplication' has data -->
+<div class="modal-overlay" *ngIf="selectedApplication">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Application Details</h2>
+      <button class="close-modal-btn" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <!-- Shop Information -->
+      <div class="detail-group">
+        <label>Shop Name</label>
+        <p>{{ selectedApplication.shopName }}</p>
+      </div>
+      <div class="detail-group">
+        <label>Shop Tagline</label>
+        <p>{{ selectedApplication.shopTagline || 'N/A' }}</p>
+      </div>
+      <div class="detail-group">
+        <label>Shop Description</label>
+        <p class="description">{{ selectedApplication.shopDescription }}</p>
+      </div>
+      
+      <!-- Personal Information -->
+      <hr>
+      <div class="detail-group">
+        <label>Full Name</label>
+        <p>{{ selectedApplication.fullName }}</p>
+      </div>
+      <div class="detail-group">
+        <label>Address</label>
+        <p>{{ selectedApplication.address }}</p>
+      </div>
+      <div class="detail-group">
+        <label>Phone Number</label>
+        <p>{{ selectedApplication.phoneNumber }}</p>
+      </div>
+
+      <!-- ID Image -->
+      <hr>
+      <div class="detail-group">
+        <label>National ID</label>
+        <!-- The image source points to the 'uploads' folder on your backend -->
+        <img [src]="'http://localhost:5000/uploads/' + selectedApplication.nationalIdFilename" alt="National ID">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-reject" (click)="reject(selectedApplication._id)">Reject</button>
+      <button class="btn-approve" (click)="approve(selectedApplication._id)">Approve</button>
+    </div>
+  </div>
+</div>

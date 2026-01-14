@@ -1,0 +1,169 @@
+/* --- RESET & LAYOUT --- */
+:host {
+  display: block;
+  font-family: 'Poppins', sans-serif; /* Make sure you have a nice font loaded */
+}
+
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #f4f6f9; /* Light grey background for content */
+  overflow: hidden;
+}
+
+/* --- SIDEBAR STYLES --- */
+.sidebar {
+  width: 260px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e0e0e0;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+  z-index: 10;
+}
+
+.logo-area {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 25px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #db2020; /* Your Brand Red */
+}
+
+.logo-area i {
+  font-size: 24px;
+}
+
+.logo-area h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
+
+/* --- NAVIGATION LINKS --- */
+.nav-links {
+  padding: 20px 15px;
+  flex: 1; /* Pushes footer down */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #64748b; /* Muted grey text */
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-item i {
+  width: 20px;
+  text-align: center;
+  font-size: 18px;
+}
+
+/* HOVER STATE */
+.nav-item:hover {
+  background-color: #fff1f1;
+  color: #db2020;
+}
+
+/* ACTIVE STATE (When you are on that page) */
+.nav-item.active {
+  background-color: #db2020;
+  color: white;
+  box-shadow: 0 4px 12px rgba(219, 32, 32, 0.3);
+}
+
+/* LOGOUT BUTTON */
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.nav-item.logout {
+  color: #d63031;
+}
+
+.nav-item.logout:hover {
+  background-color: #ffeaea;
+}
+
+/* --- MAIN CONTENT AREA --- */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Allows scrolling inside content only */
+}
+
+/* --- TOP HEADER --- */
+.top-bar {
+  height: 70px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.top-bar h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-btn {
+  background: transparent;
+  border: 1px solid #db2020;
+  color: #db2020;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+}
+
+.home-btn:hover {
+  background: #db2020;
+  color: white;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  cursor: pointer;
+}
+
+/* --- CONTENT BODY --- */
+.content-body {
+  padding: 30px;
+  /* This is where your charts, tables, and product lists will appear */
+}

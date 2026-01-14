@@ -1,0 +1,145 @@
+<div class="dashboard-container">
+  
+  <!-- 1. Welcome Header (Keep this) -->
+  <div class="header-section">
+    <div>
+      <h2>Dashboard Overview</h2>
+      <p>Welcome back! Here is your shop's performance today.</p>
+    </div>
+    <div class="date-badge">
+      <i class="far fa-calendar-alt"></i> Today, {{ today | date:'mediumDate' }}
+    </div>
+  </div>
+
+  <!-- 2. Colorful Stats Cards (Keep this) -->
+  <div class="stats-grid">
+    <div class="stat-card sales-card">
+      <div class="icon-box"><i class="fas fa-wallet"></i></div>
+      <div class="stat-info">
+        <span class="label">Total Earnings</span>
+        <h3 class="value">$12,340</h3>
+        <span class="trend up"><i class="fas fa-arrow-up"></i> +12% this week</span>
+      </div>
+    </div>
+    <div class="stat-card orders-card">
+      <div class="icon-box"><i class="fas fa-shopping-bag"></i></div>
+      <div class="stat-info">
+        <span class="label">Pending Orders</span>
+        <h3 class="value">23</h3>
+        <button class="btn-link" routerLink="../orders">Process Orders &rarr;</button>
+      </div>
+    </div>
+    <div class="stat-card products-card">
+      <div class="icon-box"><i class="fas fa-box-open"></i></div>
+      <div class="stat-info">
+        <span class="label">Active Products</span>
+        <h3 class="value">45</h3>
+        <button class="btn-link" routerLink="../prod">Manage Inventory &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SELLER INBOX -->
+  <div class="chat-section mt-4 shadow-sm">
+    
+    <!-- LEFT: Contact List -->
+    <div class="chat-sidebar">
+      <!-- Header (Moved Global Badge Here) -->
+      <div class="p-3 border-bottom bg-white d-flex align-items-center justify-content-between">
+        <h5 class="fw-bold m-0 text-dark">
+          <i class="fas fa-envelope me-2 text-primary"></i> Inbox
+        </h5>
+        <!-- 🔥 Global Badge (Total Unread) -->
+        <span class="badge bg-danger rounded-pill shadow-sm" *ngIf="totalUnread > 0">{{ totalUnread }} New</span>
+      </div>
+      
+      <!-- List -->
+      <div class="contacts-list">
+        <div *ngFor="let contact of contactList" 
+             class="contact-item position-relative" 
+             [class.active]="activeChatUser?.id === contact.id"
+             (click)="openChat(contact)">
+          
+          <div class="d-flex align-items-center">
+            
+            <!-- Avatar -->
+            <div class="avatar rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold me-3 flex-shrink-0" style="width: 45px; height: 45px;">
+              {{ contact.name.charAt(0).toUpperCase() }}
+            </div>
+
+            <!-- Name, Msg & Badge Container -->
+            <div class="flex-grow-1 overflow-hidden">
+              
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="max-width: 120px;">{{ contact.name }}</span>
+                
+                <!-- 🔥 RIGHT SIDE: Time + Badge Container -->
+                <div class="d-flex flex-column align-items-end">
+                    <small class="text-muted" style="font-size: 0.7rem;">{{ contact.lastMessageTime | date:'shortTime' }}</small>
+                    
+                    <!-- 🔥 INDIVIDUAL BADGE (Shows number of unread msgs from THIS person) -->
+                    <span class="badge bg-danger rounded-pill mt-1" style="font-size: 0.6rem;" *ngIf="contact.unread > 0">
+                        {{ contact.unread }}
+                    </span>
+                </div>
+              </div>
+
+              <p class="text-muted small mb-0 text-truncate" [class.fw-bold]="contact.unread > 0" style="max-width: 180px;">
+                {{ contact.lastMessage }}
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="contactList.length === 0" class="text-center p-5 text-muted">
+          <p>No messages yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Chat Window (Keep as is) -->
+    <div class="chat-window">
+      
+      <div class="chat-header" *ngIf="activeChatUser">
+        <div class="d-flex align-items-center">
+          <div class="avatar rounded-circle bg-dark text-white d-flex align-items-center justify-content-center fw-bold me-2" style="width: 35px; height: 35px;">
+            {{ activeChatUser.name.charAt(0).toUpperCase() }}
+          </div>
+          <span class="fs-6 text-dark">{{ activeChatUser.name }}</span>
+        </div>
+      </div>
+
+      <div class="messages-area" id="dashboardMsgContainer">
+        <div *ngIf="!activeChatUser" class="h-100 d-flex flex-column align-items-center justify-content-center text-muted">
+          <i class="far fa-comments fs-1 mb-3"></i>
+          <p>Select a customer to start chatting</p>
+        </div>
+
+        <div *ngFor="let msg of currentMessages" class="d-flex flex-column mb-3" [ngClass]="{'align-items-end': msg.senderId === currentUserId, 'align-items-start': msg.senderId !== currentUserId}">
+          <div class="p-3 rounded-3 shadow-sm" style="max-width: 75%;"
+               [ngClass]="msg.senderId === currentUserId ? 'bg-primary text-white rounded-bottom-right-0' : 'bg-white text-dark border rounded-bottom-left-0'">
+            <div *ngIf="msg.productName" class="mb-2 pb-2 border-bottom border-white border-opacity-25 small d-flex gap-2">
+               <img *ngIf="msg.productImage" [src]="msg.productImage" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
+               <span class="fw-bold align-self-center">{{ msg.productName }}</span>
+            </div>
+            <span>{{ msg.messageBody }}</span>
+          </div>
+          <small class="text-muted mt-1" style="font-size: 0.7rem;">{{ msg.timestamp | date:'shortTime' }}</small>
+        </div>
+      </div>
+
+      <div class="chat-input-area" *ngIf="activeChatUser">
+        <div class="input-group">
+          <input type="text" class="form-control border bg-light" placeholder="Type your reply..." [(ngModel)]="replyText" (keyup.enter)="sendReply()">
+          <button class="btn btn-primary px-4" (click)="sendReply()">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

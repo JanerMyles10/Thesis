@@ -1,0 +1,66 @@
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <h2>Create Account ✨</h2>
+    <p class="subtitle">Join our community today</p>
+
+    <form (ngSubmit)="register()">
+
+      <div class="input-group">
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="newUser.email"
+          name="email"
+          required
+        />
+        <label for="email">Email</label>
+      </div>
+
+      <div class="input-group">
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="newUser.name"
+          name="confirmPassword"
+          required
+        >
+        <label for="name">Name</label>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="newUser.password"
+          name="password"
+          required
+        />
+        <label for="password">Password</label>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="input-group">
+        <input
+          id="confirmPassword"
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+        <label for="confirmPassword">Confirm Password</label>
+      </div>
+      <!-- Error Message -->
+      <div *ngIf="passwordMismatch" class="error-message">
+        Passwords do not match.
+      </div>
+
+      <button type="submit" [disabled]="passwordMismatch">Register</button>
+    </form>
+
+    <p class="register-text">
+      Already have an account?
+      <a (click)="login()">Login here</a>
+    </p>
+  </div>
+</div>

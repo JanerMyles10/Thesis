@@ -1,0 +1,204 @@
+/* =========================================
+   1. MAIN LAYOUT
+   ========================================= */
+.dashboard-container {
+  padding: 2rem;
+  background-color: #f8f9fa; /* Light grey background */
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Header */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header-section h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.header-section p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.date-badge {
+  background: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* =========================================
+   2. STATS CARDS (Earnings, Orders, etc.)
+   ========================================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+/* Card Specific Colors */
+.sales-card .icon-box { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; }
+.orders-card .icon-box { background: #fffbeb; color: #f59e0b; }
+.products-card .icon-box { background: #ecfeff; color: #06b6d4; }
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-info .label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.stat-info .value {
+  margin: 5px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.trend.up {
+  color: #10b981;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #4f46e5;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* --- CHAT BOX CONTAINER --- */
+.chat-section {
+    height: 600px; /* 🔥 Fixed height is REQUIRED for scrolling */
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    overflow: hidden;
+    display: flex;
+}
+
+/* --- LEFT COLUMN (Contacts) --- */
+.chat-sidebar {
+    width: 35%; /* Fixed width */
+    border-right: 1px solid #dee2e6;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.contacts-list {
+    flex-grow: 1;
+    overflow-y: auto; /* Scrollable */
+}
+
+/* Contact Item */
+.contact-item {
+    padding: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.contact-item:hover { background-color: #f8f9fa; }
+.contact-item.active { background-color: #e0f2fe; border-left: 4px solid #0284c7; }
+
+/* --- RIGHT COLUMN (Conversation) --- */
+.chat-window {
+    width: 65%; /* Remaining width */
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    height: 100%;
+}
+
+/* Chat Header */
+.chat-header {
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+    background: white;
+    flex-shrink: 0; /* Keeps header fixed */
+    font-weight: bold;
+}
+
+/* 🔥 MESSAGES AREA (The part that scrolls) */
+.messages-area {
+    flex-grow: 1;
+    overflow-y: auto; /* ENABLE SCROLL */
+    padding: 20px;
+    background-color: #f3f4f6; /* Light grey bg */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Input Area (Pinned to bottom) */
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid #dee2e6;
+    background: white;
+    flex-shrink: 0; /* Keeps input fixed */
+}
+
+/* --- SCROLLBAR STYLING --- */
+.contacts-list::-webkit-scrollbar,
+.messages-area::-webkit-scrollbar {
+    width: 6px;
+}
+.contacts-list::-webkit-scrollbar-thumb,
+.messages-area::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Chat Bubble Radius tweaks */
+.rounded-bottom-right-0 {
+    border-bottom-right-radius: 0 !important;
+}
+.rounded-bottom-left-0 {
+    border-bottom-left-radius: 0 !important;
+}

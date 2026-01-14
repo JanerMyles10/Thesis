@@ -1,0 +1,40 @@
+/* Card Styling */
+.product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Image Overlay (Edit/Delete Buttons) */
+.product-card .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.product-card:hover .overlay {
+    opacity: 1;
+}
+
+/* Empty State Border */
+.border-dashed {
+    border: 2px dashed #dee2e6 !important;
+}
+
+/* Cursor Pointer */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.hover-effect:hover {
+    background-color: #e9ecef !important;
+}
