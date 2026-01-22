@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../model/User');
 const ShopApplication = require('../model/ShopApplication');
+const Shop = require('../model/Shop'); 
 
 router.get('/users', async (req, res) => {
   try {
@@ -75,11 +76,31 @@ router.put('/shop-applications/:id/approve', async (req, res) => {
       return res.status(404).json({ message: 'Application not found' });
     }
 
+
     if (application.userId) {
       await User.findByIdAndUpdate(application.userId, { role: 'seller' });
     }
 
-    res.json({ message: 'Application approved and user promoted to seller', application });
+    const existingShop = await Shop.findOne({ ownerId: application.userId });
+    
+    if (!existingShop) {
+      const newShop = new Shop({
+        _id: application._id,
+        ownerId: application.userId,
+        shopName: application.shopName,
+        shopTagline: application.shopTagline,
+        shopDescription: application.shopDescription,
+        fullName: application.fullName,
+        address: application.address,
+        phoneNumber: application.phoneNumber,
+        status: 'Approved',
+        isBoosted: false
+      });
+      await newShop.save();
+      console.log("Shop created automatically in database.");
+    }
+
+    res.json({ message: 'Application approved, user promoted, and Shop created!', application });
   } catch (error) {
     console.error("Error approving application:", error);
     res.status(500).json({ message: 'Error approving application', error });
@@ -104,6 +125,36 @@ router.put('/shop-applications/:id/reject', async (req, res) => {
   } catch (error) {
     console.error("Error rejecting application:", error);
     res.status(500).json({ message: 'Error rejecting application', error });
+  }
+});
+
+router.get('/shops/approved', async (req, res) => {
+  try {
+    const shops = await Shop.find({});
+    res.json(shops);
+  } catch (error) {
+    console.error("Error fetching shops:", error);
+    res.status(500).json({ message: 'Error fetching shops', error });
+  }
+});
+
+router.put('/shops/:id/boost', async (req, res) => {
+  try {
+    const { isBoosted } = req.body;
+    await Shop.findByIdAndUpdate(req.params.id, { isBoosted });
+    res.json({ message: 'Boost status updated' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating boost status', error });
+  }
+});
+
+router.put('/shops/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    await Shop.findByIdAndUpdate(req.params.id, { status });
+    res.json({ message: 'Shop status updated' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating shop status', error });
   }
 });
 

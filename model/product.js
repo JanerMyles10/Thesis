@@ -1,10 +1,21 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const ProductSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   description: { type: String },
-  imageUrl: { type: String, required: true },
+  imageUrl: { type: String },
+  ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Needed for Shop Name lookup
+  
+  // ✅ ADD THIS FOR REVIEWS
+  reviews: [
+    {
+      user: String,
+      rating: Number,
+      comment: String,
+      date: { type: Date, default: Date.now }
+    }
+  ]
 });
 
-module.exports = mongoose.model("Product", ProductSchema);
+module.exports = mongoose.model('Product', productSchema);
