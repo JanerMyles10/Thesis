@@ -1,12 +1,13 @@
 <div class="container mt-5">
   <h2 class="mb-4">Sales Reports</h2>
 
+  <!-- Summary Cards -->
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card text-center shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Total Sales</h5>
-          <p class="card-text fs-4 fw-bold text-success">₱15,240</p>
+          <p class="card-text fs-4 fw-bold text-success">₱{{ totalSales | number:'1.0-2' }}</p>
         </div>
       </div>
     </div>
@@ -14,7 +15,7 @@
       <div class="card text-center shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Total Orders</h5>
-          <p class="card-text fs-4 fw-bold text-primary">34</p>
+          <p class="card-text fs-4 fw-bold text-primary">{{ totalOrders }}</p>
         </div>
       </div>
     </div>
@@ -22,13 +23,16 @@
       <div class="card text-center shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Top Product</h5>
-          <p class="card-text fs-5 fw-semibold">Handmade Bag</p>
+          <p class="card-text fs-5 fw-semibold" *ngIf="topProduct; else noTopProduct">{{ topProduct }}</p>
+          <ng-template #noTopProduct>
+            <span class="text-muted">No products sold yet</span>
+          </ng-template>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Sales Table -->
+  <!-- Recent Sales Table -->
   <h4 class="mb-3">Recent Sales</h4>
   <table class="table table-bordered table-hover">
     <thead class="table-dark">
@@ -42,29 +46,29 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>2025-09-20</td>
-        <td>#1001</td>
-        <td>Handmade Bag</td>
-        <td>2</td>
-        <td>₱1,200</td>
-        <td><span class="badge bg-success">Completed</span></td>
+      <tr *ngFor="let order of recentSales">
+        <td>{{ order.date | date:'shortDate' }}</td>
+        <td>#{{ order._id }}</td>
+        <td>{{ order.productName }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>₱{{ order.total | number:'1.0-2' }}</td>
+        <td>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success': order.status === 'Complete',
+              'bg-warning': order.status === 'Pending',
+              'bg-danger': order.status === 'Cancelled'
+            }"
+          >
+            {{ order.status }}
+          </span>
+        </td>
       </tr>
-      <tr>
-        <td>2025-09-19</td>
-        <td>#1000</td>
-        <td>Wooden Sculpture</td>
-        <td>1</td>
-        <td>₱2,500</td>
-        <td><span class="badge bg-success">Completed</span></td>
-      </tr>
-      <tr>
-        <td>2025-09-18</td>
-        <td>#999</td>
-        <td>Beaded Necklace</td>
-        <td>3</td>
-        <td>₱900</td>
-        <td><span class="badge bg-danger">Cancelled</span></td>
+
+      <!-- No recent orders fallback -->
+      <tr *ngIf="recentSales.length === 0">
+        <td colspan="6" class="text-center text-muted">No recent sales yet</td>
       </tr>
     </tbody>
   </table>

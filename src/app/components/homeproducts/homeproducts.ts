@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 // Services
-import { ProductService } from '../../services/sellerpage'; 
+import { ProductService } from '../../services/sellerpage';
 import { CartService } from '../../services/cart';
 
 declare var bootstrap: any;
@@ -24,7 +24,7 @@ export class Homeproducts implements OnInit, OnDestroy {
   userEmail: string | null = null;
   name: string | null = null;
   currentUserId: string | null = null;
-  isSeller: boolean = false; 
+  isSeller: boolean = false;
 
   // Selected Product Data
   selectedProduct: any = null;
@@ -42,7 +42,7 @@ export class Homeproducts implements OnInit, OnDestroy {
   currentMessages: any[] = [];
   activeChatUser: any = null;
   replyText: string = '';
-  
+
   // Refresh Timer
   private chatInterval: any;
 
@@ -60,12 +60,12 @@ export class Homeproducts implements OnInit, OnDestroy {
     // 1. Load Chat & Start Polling
     if (this.currentUserId) {
       this.loadContacts();
-      
+
       // Poll every 5 seconds to get new messages/contacts
       this.chatInterval = setInterval(() => {
         // We ONLY call loadContacts. We calculate the unread count inside there.
         // This prevents the "Server says 1, App says 0" conflict.
-        this.loadContacts(); 
+        this.loadContacts();
       }, 5000);
     }
 
@@ -108,23 +108,23 @@ export class Homeproducts implements OnInit, OnDestroy {
       messages.forEach(msg => {
         const isMeSender = msg.senderId === this.currentUserId;
         const otherId = isMeSender ? msg.receiverId : msg.senderId;
-        
+
         // --- 1. NAME FIX: Smart Detection ---
         // We look for ANY message in the thread that contains the Shop Name.
-        let potentialName = msg.shopName; 
-        
+        let potentialName = msg.shopName;
+
         if (!contactsMap.has(otherId)) {
           // Initialize Contact
           contactsMap.set(otherId, {
             id: otherId,
-            name: (potentialName && potentialName !== 'null') ? potentialName : 'Seller', 
+            name: (potentialName && potentialName !== 'null') ? potentialName : 'Seller',
             lastMessage: msg.messageBody,
             lastMessageTime: msg.timestamp,
             initial: 'S', // Default initial
             unread: 0
           });
-        } 
-        
+        }
+
         // Access the existing contact object
         const contact = contactsMap.get(otherId);
 
@@ -148,7 +148,7 @@ export class Homeproducts implements OnInit, OnDestroy {
       });
 
       this.contactList = Array.from(contactsMap.values());
-      
+
       // Update the Global Red Badge based on our calculated list
       this.unreadCount = this.contactList.reduce((sum, c) => sum + c.unread, 0);
     });
@@ -156,7 +156,7 @@ export class Homeproducts implements OnInit, OnDestroy {
 
   openChat(contact: any) {
     this.activeChatUser = contact;
-    
+
     if(this.currentUserId) {
       // 1. Mark as Read in Backend
       this.productService.markMessagesAsRead(this.currentUserId, contact.id).subscribe();
@@ -164,7 +164,7 @@ export class Homeproducts implements OnInit, OnDestroy {
       // 2. 🔥 INSTANTLY REMOVE BADGE LOCALLY
       if (contact.unread > 0) {
           this.unreadCount = Math.max(0, this.unreadCount - contact.unread);
-          contact.unread = 0; 
+          contact.unread = 0;
       }
 
       // 3. Load Chat History
@@ -194,7 +194,7 @@ export class Homeproducts implements OnInit, OnDestroy {
       senderId: this.currentUserId,
       receiverId: this.activeChatUser.id,
       messageBody: this.replyText,
-      productId: null, 
+      productId: null,
       productName: null,
       shopName: this.activeChatUser.name // Preserve name if replying
     };
@@ -223,7 +223,7 @@ export class Homeproducts implements OnInit, OnDestroy {
   openMessageModal(product: any) {
     this.selectedProduct = product;
     this.messageText = `Hi, is this ${product.name} still available?`;
-    
+
     const viewModalEl = document.getElementById('viewProductModal');
     if (viewModalEl) {
         const viewModal = bootstrap.Modal.getInstance(viewModalEl);
@@ -237,7 +237,7 @@ export class Homeproducts implements OnInit, OnDestroy {
   sendMessage() {
     const currentUserId = localStorage.getItem('userId');
     const currentUserName = localStorage.getItem('name');
-    
+
     if (!currentUserId) {
       alert("Please log in to send a message.");
       return;
@@ -257,7 +257,7 @@ export class Homeproducts implements OnInit, OnDestroy {
     this.productService.sendMessage(messageData).subscribe({
       next: (res) => {
         this.showToast('Message sent to seller!');
-        
+
         const modalEl = document.getElementById('messageModal');
         const modal = bootstrap.Modal.getInstance(modalEl);
         if (modal) modal.hide();
@@ -268,7 +268,7 @@ export class Homeproducts implements OnInit, OnDestroy {
           name: this.selectedProduct.shopName || 'Seller'
         };
 
-        this.currentMessages = []; 
+        this.currentMessages = [];
         this.currentMessages.push({
           senderId: this.currentUserId,
           receiverId: this.selectedProduct.ownerId,

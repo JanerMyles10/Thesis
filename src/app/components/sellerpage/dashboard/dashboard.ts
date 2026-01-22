@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ProductService } from '../../../services/sellerpage'; 
+import { ProductService } from '../../../services/sellerpage';
 import { FormsModule } from '@angular/forms';
+import { OrdersService, Order } from '../../../services/orders';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,31 +16,48 @@ export class Dashboard implements OnInit, OnDestroy {
   today: number = Date.now();
   currentUserId: string | null = null;
   totalUnread: number = 0;
-  
+  totalOrders: number = 0;
+  totalProducts: number = 0;
+
   // Chat Variables
   contactList: any[] = [];
   currentMessages: any[] = [];
   activeChatUser: any = null;
   replyText: string = '';
-  
+
   // Interval to auto-refresh notifications
   private refreshInterval: any;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private ordersService: OrdersService) {}
 
-  ngOnInit(): void {
-    this.currentUserId = localStorage.getItem('userId');
+ ngOnInit(): void {
+  this.currentUserId = localStorage.getItem('userId');
 
-    if (this.currentUserId) {
-      this.loadContacts();
-      this.updateUnreadCount(); // 🔥 Check for unread msgs immediately
+  if (this.currentUserId) {
 
-      // 🔥 Auto-refresh badge every 5 seconds so you see new msgs without reloading
-      this.refreshInterval = setInterval(() => {
-        this.updateUnreadCount();
-      }, 5000);
-    }
+    // 🔥 LIVE ORDER COUNT
+    this.ordersService.getTotalOrders(this.currentUserId)
+      .subscribe(res => {
+        this.totalOrders = res.totalOrders;
+      });
+
+    // 🔥 LIVE PRODUCT COUNT (ADD THIS)
+    this.productService.getProducts().subscribe(products => {
+      this.totalProducts = products.filter(
+        p => p.ownerId === this.currentUserId
+      ).length;
+    });
+
+    // existing logic
+    this.loadContacts();
+    this.updateUnreadCount();
+
+    this.refreshInterval = setInterval(() => {
+      this.updateUnreadCount();
+    }, 5000);
   }
+}
+
 
   ngOnDestroy(): void {
     // Stop the timer when leaving the dashboard to prevent errors
@@ -67,11 +85,11 @@ export class Dashboard implements OnInit, OnDestroy {
       messages.forEach(msg => {
         const isMeSender = msg.senderId === this.currentUserId;
         const otherId = isMeSender ? msg.receiverId : msg.senderId;
-        
+
         let displayName = "Guest Buyer";
         if (!isMeSender && msg.senderName) {
             displayName = msg.senderName;
-        } 
+        }
 
         if (!contactsMap.has(otherId)) {
           contactsMap.set(otherId, {
@@ -85,7 +103,7 @@ export class Dashboard implements OnInit, OnDestroy {
 
         const contact = contactsMap.get(otherId);
         if (!isMeSender && msg.senderName) {
-           contact.name = msg.senderName; 
+           contact.name = msg.senderName;
         }
         if (msg.receiverId === this.currentUserId && !msg.isRead) {
             contact.unread++;
@@ -98,7 +116,7 @@ export class Dashboard implements OnInit, OnDestroy {
 
   openChat(contact: any) {
     this.activeChatUser = contact;
-    
+
     if (this.currentUserId) {
       // 1. Mark messages as READ in Backend
       this.productService.markMessagesAsRead(this.currentUserId, contact.id).subscribe(() => {
@@ -109,9 +127,9 @@ export class Dashboard implements OnInit, OnDestroy {
       if (contact.unread > 0) {
           // Subtract this contact's unread messages from the total immediately
           this.totalUnread = Math.max(0, this.totalUnread - contact.unread);
-          
+
           // Clear this contact's badge
-          contact.unread = 0; 
+          contact.unread = 0;
       }
 
       // 3. Load History
@@ -129,9 +147,9 @@ export class Dashboard implements OnInit, OnDestroy {
       senderId: this.currentUserId,
       receiverId: this.activeChatUser.id,
       messageBody: this.replyText,
-      productId: null, 
+      productId: null,
       productName: null,
-      shopName: null 
+      shopName: null
     };
 
     this.productService.sendMessage(msgData).subscribe(res => {

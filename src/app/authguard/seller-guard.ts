@@ -4,19 +4,18 @@ import { CanActivate, Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class SellerGuard implements CanActivate {
 
   constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const isLoggedIn = !!localStorage.getItem('userLoggedIn');
+    const isLoggedIn = localStorage.getItem('userRole') === 'seller';
 
     if (!isLoggedIn) {
-      this.router.navigate(['/login']); // redirect to login page
+      this.router.navigate(['/seller']); // redirect to login page
       return false;
     }
 
     return true;
   }
 }
-

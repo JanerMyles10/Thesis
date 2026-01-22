@@ -22,17 +22,16 @@ export class Profile implements OnInit {
     address: '',
     bio: ''
   };
-  
+
   userId: string | null = null;
   previewImage: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
   successMessage: string = '';
 
   ngOnInit() {
-    // Assuming you store userId in localStorage upon login
-    // If you only store email, change logic to fetch by email
+
     const email = localStorage.getItem('userEmail');
-    
+
     if (email) {
       this.fetchUserProfile(email);
     } else {
@@ -80,7 +79,7 @@ export class Profile implements OnInit {
         this.successMessage = 'Profile updated successfully!';
         // Update local name if needed
         localStorage.setItem('name', this.user.fullName);
-        
+
         setTimeout(() => this.successMessage = '', 3000);
       },
       error: (err) => alert('Failed to update profile')

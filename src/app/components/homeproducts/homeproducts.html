@@ -51,7 +51,7 @@
 
   <!-- MAIN LAYOUT -->
   <div class="main-layout">
-    
+
     <!-- NO PRODUCTS FOUND -->
     <div *ngIf="filteredProducts.length === 0" class="no-results">
       <i class="fas fa-search"></i>
@@ -74,10 +74,10 @@
            </div>
         </div>
         <div class="card-details">
-          
+
           <!-- Dynamic Shop Name -->
           <small class="artisan-name" style="color: #6c757d; font-weight: 600;">
-            <i class="fas fa-store-alt me-1"></i> {{ product.shopName || 'Artisan Store' }}
+            <i class="fas fa-store-alt me-1"></i> {{ product.shopName }}
           </small>
 
           <div class="product-name" [title]="product.name">{{ product.name }}</div>
@@ -95,7 +95,7 @@
              <button class="btn-buy" (click)="openMessageModal(product)">
                 <i class="fas fa-comment-dots"></i> Message
              </button>
-         </div> 
+         </div>
         </div>
       </div>
     </section>
@@ -104,7 +104,7 @@
   <footer class="site-footer">
     <p>&copy; 2025 Maker's Magic. Bringing local talent to your home.</p>
   </footer>
-</div> 
+</div>
 
 
 <!-- VIEW PRODUCT MODAL -->
@@ -305,11 +305,11 @@
 
 <!-- FLOATING CHAT WIDGET -->
 <div class="chat-widget-container">
-  
+
   <!-- 1. THE FLOATING BUTTON -->
   <button class="chat-toggle-btn shadow-lg position-relative" (click)="toggleChat()">
     <i class="fas fa-comment-dots"></i>
-    
+
     <!-- 🔥 RED NOTIFICATION BADGE -->
     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" *ngIf="unreadCount > 0">
       {{ unreadCount }}
@@ -318,7 +318,7 @@
 
   <!-- 2. THE CHAT BOX -->
   <div class="chat-box shadow-lg" *ngIf="isChatOpen">
-    
+
     <!-- HEADER -->
     <div class="chat-header bg-primary text-white d-flex justify-content-between align-items-center p-3">
       <div class="d-flex align-items-center">
@@ -342,7 +342,7 @@
 
       <div class="contact-list flex-grow-1 overflow-auto">
         <div *ngFor="let contact of contactList" class="contact-item p-3 border-bottom d-flex align-items-center cursor-pointer" (click)="openChat(contact)">
-           <div class="avatar shadow-sm rounded-circle d-flex align-items-center justify-content-center me-3 text-white fw-bold" 
+           <div class="avatar shadow-sm rounded-circle d-flex align-items-center justify-content-center me-3 text-white fw-bold"
                 style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 1.1rem;">
              {{ contact.initial || 'S' }}
            </div>
@@ -366,7 +366,7 @@
 
     <!-- VIEW B: CONVERSATION -->
     <div class="chat-body d-flex flex-column" *ngIf="activeChatUser">
-      
+
       <!-- Messages -->
       <div class="messages-container" id="msgContainer">
         <div *ngFor="let msg of currentMessages" class="d-flex flex-column" [ngClass]="{'align-items-end': msg.senderId === currentUserId, 'align-items-start': msg.senderId !== currentUserId}">
@@ -385,14 +385,14 @@
 
       <!-- 🔥 Input Area (Fixed Alignment) -->
       <div class="chat-footer d-flex align-items-center gap-2 bg-white border-top p-2">
-        <input type="text" class="form-control rounded-pill bg-light border-0 shadow-none px-3" 
-               placeholder="Type a message..." 
-               [(ngModel)]="replyText" 
+        <input type="text" class="form-control rounded-pill bg-light border-0 shadow-none px-3"
+               placeholder="Type a message..."
+               [(ngModel)]="replyText"
                (keyup.enter)="sendReply()"
                style="height: 40px;">
-        
-        <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm p-0" 
-                style="width: 40px; height: 40px; flex-shrink: 0;" 
+
+        <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm p-0"
+                style="width: 40px; height: 40px; flex-shrink: 0;"
                 (click)="sendReply()">
           <i class="fas fa-paper-plane" style="font-size: 1rem; margin-left: -2px;"></i>
         </button>

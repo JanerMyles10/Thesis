@@ -1,7 +1,10 @@
 <div class="container mt-5">
   <h2 class="mb-4">Seller Orders</h2>
 
-  <table class="table table-bordered table-hover">
+  <div *ngIf="loading">Loading orders...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <table class="table table-bordered table-hover" *ngIf="!loading && orders.length">
     <thead class="table-dark">
       <tr>
         <th>Order ID</th>
@@ -14,30 +17,45 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Juan Dela Cruz</td>
-        <td>Handmade Bag</td>
-        <td>2</td>
-        <td>₱1,200</td>
-        <td><span class="badge bg-warning">Pending</span></td>
+      <tr *ngFor="let order of orders">
+        <td>{{ order._id }}</td>
+        <td>{{ order.buyerName }}</td>
+        <td>{{ order.productName }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>₱{{ order.total | number:'1.0-2' }}</td>
         <td>
-          <button class="btn btn-sm btn-success me-2">Complete</button>
-          <button class="btn btn-sm btn-danger">Cancel</button>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-warning': order.status === 'Pending',
+              'bg-success': order.status === 'Complete',
+              'bg-danger': order.status === 'Cancelled'
+            }"
+          >
+            {{ order.status }}
+          </span>
         </td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Maria Santos</td>
-        <td>Wooden Sculpture</td>
-        <td>1</td>
-        <td>₱2,500</td>
-        <td><span class="badge bg-warning">Pending</span></td>
         <td>
-          <button class="btn btn-sm btn-success me-2">Complete</button>
-          <button class="btn btn-sm btn-danger">Cancel</button>
+          <button
+            class="btn btn-sm btn-success me-2"
+            [disabled]="order.status !== 'Pending'"
+            (click)="changeStatus(order, 'Complete')"
+          >
+            Complete
+          </button>
+          <button
+            class="btn btn-sm btn-danger"
+            [disabled]="order.status !== 'Pending'"
+            (click)="changeStatus(order, 'Cancelled')"
+          >
+            Cancel
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="!loading && orders.length === 0">
+    No orders yet.
+  </div>
 </div>

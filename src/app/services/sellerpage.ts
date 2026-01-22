@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class ProductService {
   // ✅ FIXED: Added '/api' to match your app.js configuration
-  private apiUrl = 'http://localhost:5000/api/products'; 
-  
+  private apiUrl = 'http://localhost:5000/api/products';
+
   constructor(private http: HttpClient) { }
 
   // Get all products
@@ -72,5 +72,11 @@ getUnreadCount(userId: string): Observable<any> {
 // Mark messages as read
 markMessagesAsRead(myId: string, otherId: string): Observable<any> {
   return this.http.put(`http://localhost:5000/api/messages/mark-read/${myId}/${otherId}`, {});
+}
+
+getTotalOrders(sellerId: string) {
+  return this.http.get<{ totalOrders: number }>(
+    `${this.apiUrl}/count/${sellerId}`
+  );
 }
 }

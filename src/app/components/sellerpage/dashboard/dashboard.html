@@ -1,5 +1,5 @@
 <div class="dashboard-container">
-  
+
   <!-- 1. Welcome Header (Keep this) -->
   <div class="header-section">
     <div>
@@ -24,8 +24,8 @@
     <div class="stat-card orders-card">
       <div class="icon-box"><i class="fas fa-shopping-bag"></i></div>
       <div class="stat-info">
-        <span class="label">Pending Orders</span>
-        <h3 class="value">23</h3>
+        <span class="label">Orders</span>
+        <h3 class="value"> {{ totalOrders }} </h3>
         <button class="btn-link" routerLink="../orders">Process Orders &rarr;</button>
       </div>
     </div>
@@ -33,7 +33,7 @@
       <div class="icon-box"><i class="fas fa-box-open"></i></div>
       <div class="stat-info">
         <span class="label">Active Products</span>
-        <h3 class="value">45</h3>
+        <h3 class="value">{{ totalProducts }}</h3>
         <button class="btn-link" routerLink="../prod">Manage Inventory &rarr;</button>
       </div>
     </div>
@@ -41,7 +41,7 @@
 
   <!-- 3. SELLER INBOX -->
   <div class="chat-section mt-4 shadow-sm">
-    
+
     <!-- LEFT: Contact List -->
     <div class="chat-sidebar">
       <!-- Header (Moved Global Badge Here) -->
@@ -52,16 +52,16 @@
         <!-- 🔥 Global Badge (Total Unread) -->
         <span class="badge bg-danger rounded-pill shadow-sm" *ngIf="totalUnread > 0">{{ totalUnread }} New</span>
       </div>
-      
+
       <!-- List -->
       <div class="contacts-list">
-        <div *ngFor="let contact of contactList" 
-             class="contact-item position-relative" 
+        <div *ngFor="let contact of contactList"
+             class="contact-item position-relative"
              [class.active]="activeChatUser?.id === contact.id"
              (click)="openChat(contact)">
-          
+
           <div class="d-flex align-items-center">
-            
+
             <!-- Avatar -->
             <div class="avatar rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold me-3 flex-shrink-0" style="width: 45px; height: 45px;">
               {{ contact.name.charAt(0).toUpperCase() }}
@@ -69,14 +69,14 @@
 
             <!-- Name, Msg & Badge Container -->
             <div class="flex-grow-1 overflow-hidden">
-              
+
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <span class="fw-bold text-dark text-truncate" style="max-width: 120px;">{{ contact.name }}</span>
-                
+
                 <!-- 🔥 RIGHT SIDE: Time + Badge Container -->
                 <div class="d-flex flex-column align-items-end">
                     <small class="text-muted" style="font-size: 0.7rem;">{{ contact.lastMessageTime | date:'shortTime' }}</small>
-                    
+
                     <!-- 🔥 INDIVIDUAL BADGE (Shows number of unread msgs from THIS person) -->
                     <span class="badge bg-danger rounded-pill mt-1" style="font-size: 0.6rem;" *ngIf="contact.unread > 0">
                         {{ contact.unread }}
@@ -101,7 +101,7 @@
 
     <!-- RIGHT: Chat Window (Keep as is) -->
     <div class="chat-window">
-      
+
       <div class="chat-header" *ngIf="activeChatUser">
         <div class="d-flex align-items-center">
           <div class="avatar rounded-circle bg-dark text-white d-flex align-items-center justify-content-center fw-bold me-2" style="width: 35px; height: 35px;">

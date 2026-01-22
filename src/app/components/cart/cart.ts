@@ -34,7 +34,7 @@ export class Cart implements OnInit {
     this.updateTotal();
   }
 
-  decreaseQuantity(item: any) {
+  decreaseQuantity(item: any) { 
     if (item.quantity > 1) item.quantity--;
     this.updateTotal();
   }

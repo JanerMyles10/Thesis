@@ -15,13 +15,14 @@ import { Products } from './components/sellerpage/products/products';
 import { Reports } from './components/sellerpage/reports/reports';
 import { AuthGuard } from './authguard/login-guard';
 import { SettingsComponent } from './components/sellerpage/settings/settings';
-import { Profile } from './components/profile/profile'; 
+import { Profile } from './components/profile/profile';
 
 
 // --- ADMIN IMPORTS ---
 import { AdminDashboard } from './components/admin-dashboard/admin-dashboard';
 import { AdminShopApp } from './components/admin-shop-app/admin-shop-app'; // Changed folder name for consistency
-import { AdminShopManagement } from './components/admin-shop-management/admin-shop-management'; 
+import { AdminShopManagement } from './components/admin-shop-management/admin-shop-management';
+import { SellerGuard } from './authguard/seller-guard';
 
 export const routes: Routes = [
   { path: '', component: Homepage },
@@ -35,7 +36,7 @@ export const routes: Routes = [
 
   {
     path: 'seller',
-    component: Sellerpage,
+    component: Sellerpage, canActivate: [SellerGuard],
     children: [
       { path: 'dash', component: Dashboard },
       { path: 'orders', component: Orders },
