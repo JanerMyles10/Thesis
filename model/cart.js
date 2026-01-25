@@ -9,7 +9,7 @@ const cartItemSchema = new mongoose.Schema({
 
 const cartUserSchema = new mongoose.Schema({
   userId: { type: String, required: true },
-  items: [cartItemSchema]
+  items: [cartItemSchema],
 });
 
 module.exports = mongoose.model("Cart", cartUserSchema);
