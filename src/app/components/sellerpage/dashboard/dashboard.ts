@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../services/sellerpage';
 import { FormsModule } from '@angular/forms';
 import { OrdersService, Order } from '../../../services/orders';
+import { SocketService } from '../../../services/socket';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,35 +29,39 @@ export class Dashboard implements OnInit, OnDestroy {
   // Interval to auto-refresh notifications
   private refreshInterval: any;
 
-  constructor(private productService: ProductService, private ordersService: OrdersService) {}
+  constructor(private productService: ProductService, private ordersService: OrdersService, private socketService: SocketService) {}
 
  ngOnInit(): void {
   this.currentUserId = localStorage.getItem('userId');
 
-  if (this.currentUserId) {
+  if (!this.currentUserId) return;
 
-    // 🔥 LIVE ORDER COUNT
-    this.ordersService.getTotalOrders(this.currentUserId)
-      .subscribe(res => {
-        this.totalOrders = res.totalOrders;
-      });
+  // Load once
+  this.loadContacts();
+  this.updateUnreadCount();
 
-    // 🔥 LIVE PRODUCT COUNT (ADD THIS)
-    this.productService.getProducts().subscribe(products => {
-      this.totalProducts = products.filter(
-        p => p.ownerId === this.currentUserId
-      ).length;
-    });
+  // 🔥 AUTO-REFRESH CHAT
+  this.refreshInterval = setInterval(() => {
 
-    // existing logic
+    // 1. Update inbox list
     this.loadContacts();
+
+    // 2. Update unread badge
     this.updateUnreadCount();
 
-    this.refreshInterval = setInterval(() => {
-      this.updateUnreadCount();
-    }, 5000);
-  }
+    // 3. If chat is open, refresh messages
+    if (this.activeChatUser) {
+      this.productService
+        .getChatHistory(this.currentUserId!, this.activeChatUser.id)
+        .subscribe(msgs => {
+          this.currentMessages = msgs;
+          this.scrollToBottom();
+        });
+    }
+
+  }, 3000); // every 3 seconds
 }
+
 
 
   ngOnDestroy(): void {

@@ -11,7 +11,7 @@ export class CartService {
   cartCount$ = this.cartCount.asObservable();
 
   // 🔑 Backend API URL
-  private apiUrl = 'https://your-backend.com/api/cart'; // replace with your backend URL
+  private apiUrl = 'https://localhost:5000/api/cart'; // replace with your backend URL
 
   constructor(private http: HttpClient) {
     this.loadCart(); // load localStorage first
