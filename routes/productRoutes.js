@@ -49,6 +49,7 @@ router.get("/", async (req, res) => {
           _id: 1,
           name: 1,
           price: 1,
+          quantity: 1,
           description: 1,
           imageUrl: 1,
           ownerId: 1,
@@ -74,6 +75,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     const newProduct = new Product({
       name,
       price,
+      quantity,
       description,
       ownerId, 
       imageUrl: req.file ? `http://localhost:5000/uploads/${req.file.filename}` : "" 
@@ -121,6 +123,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     // Update fields if provided
     if (name) product.name = name;
     if (price) product.price = price;
+    if (quantity) product.quantity = quantity;
     if (description) product.description = description;
 
     // Update image ONLY if a new one is uploaded
