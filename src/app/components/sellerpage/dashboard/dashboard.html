@@ -109,6 +109,10 @@
           </div>
           <span class="fs-6 text-dark">{{ activeChatUser.name }}</span>
         </div>
+        <button class="btn btn-success btn-sm"
+            (click)="openCreateOrder()">
+            <i class="fas fa-check-circle me-1"></i> Create Order
+          </button>
       </div>
 
       <div class="messages-area" id="dashboardMsgContainer">
@@ -142,4 +146,36 @@
     </div>
   </div>
 
+  <div class="modal fade" id="createOrderModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Order</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Product Name</label>
+          <input type="text" class="form-control" [(ngModel)]="orderProduct">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Quantity</label>
+          <input type="number" class="form-control" [(ngModel)]="orderQuantity">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Total Price</label>
+          <input type="number" class="form-control" [(ngModel)]="orderTotal">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-success" (click)="confirmOrder()"> Mark as Sold </button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>

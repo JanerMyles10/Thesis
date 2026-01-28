@@ -1,61 +1,56 @@
-<div class="container mt-5">
-  <h2 class="mb-4">Seller Orders</h2>
+<div class="container">
+  <div class="header">
+    <h1>Order History</h1>
+    <p>View your complete transaction history</p>
+  </div>
 
-  <div *ngIf="loading">Loading orders...</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-number">{{ totalOrders }}</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">₱{{ totalAmount.toFixed(2) }}</div>
+      <div class="stat-label">Total Earned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ completedOrders }}</div>
+      <div class="stat-label">Completed</div>
+    </div>
+  </div>
 
-  <table class="table table-bordered table-hover" *ngIf="!loading && orders.length">
-    <thead class="table-dark">
-      <tr>
-        <th>Order ID</th>
-        <th>Buyer</th>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Total</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let order of orders">
-        <td>{{ order._id }}</td>
-        <td>{{ order.buyerName }}</td>
-        <td>{{ order.productName }}</td>
-        <td>{{ order.quantity }}</td>
-        <td>₱{{ order.total | number:'1.0-2' }}</td>
-        <td>
-          <span
-            class="badge"
-            [ngClass]="{
-              'bg-warning': order.status === 'Pending',
-              'bg-success': order.status === 'Complete',
-              'bg-danger': order.status === 'Cancelled'
-            }"
-          >
-            {{ order.status }}
-          </span>
-        </td>
-        <td>
-          <button
-            class="btn btn-sm btn-success me-2"
-            [disabled]="order.status !== 'Pending'"
-            (click)="changeStatus(order, 'Complete')"
-          >
-            Complete
-          </button>
-          <button
-            class="btn btn-sm btn-danger"
-            [disabled]="order.status !== 'Pending'"
-            (click)="changeStatus(order, 'Cancelled')"
-          >
-            Cancel
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div *ngIf="!loading && orders.length === 0">
-    No orders yet.
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Seller ID</th>
+          <th>Buyer ID</th>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of orders">
+          <td><span class="id-badge">{{ o.sellerId }}</span></td>
+          <td><span class="id-badge">{{ o.buyerName }}</span></td>
+          <td>{{ o.productName }}</td>
+          <td><span class="quantity">{{ o.quantity }}</span></td>
+          <td class="total">₱{{ o.total }}</td>
+          <td>
+            <span class="status"
+                  [ngClass]="{
+                    'delivered': o.status === 'Completed',
+                    'pending': o.status !== 'Completed'
+                  }">
+              {{ o.status }}
+            </span>
+          </td>
+          <td>{{ o.createdAt | date:'mediumDate' }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

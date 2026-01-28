@@ -15,13 +15,13 @@ declare var bootstrap: any;
 export class Products implements OnInit {
   // Variables for Adding Products
   newProduct: any = { name: '', price: null, size: '', description: '', image: null };
-  
+
   // Variables for Listing
-  sellerProducts: any[] = []; 
+  sellerProducts: any[] = [];
   currentOwnerId: string | null = null;
 
   // 🔥 NEW: Variables for Editing
-  productToEdit: any = {}; 
+  productToEdit: any = {};
   editImageFile: File | null = null;
 
   constructor(private productService: ProductService) {}
@@ -29,23 +29,26 @@ export class Products implements OnInit {
   ngOnInit(): void {
     // 1. Get the logged-in User ID
     this.currentOwnerId = localStorage.getItem('userId');
-    
+
     // 2. Load the products immediately
     this.loadSellerProducts();
   }
 
   // --- FETCH PRODUCTS ---
-  loadSellerProducts() {
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        if (this.currentOwnerId) {
-          // Filter: Show only products where ownerId matches current User
-          this.sellerProducts = products.filter(p => p.ownerId === this.currentOwnerId);
-        }
-      },
-      error: (err) => console.error('Error loading products:', err)
-    });
-  }
+    loadSellerProducts() {
+      this.productService.getProducts().subscribe({
+        next: (products) => {
+          if (this.currentOwnerId) {
+            this.sellerProducts = products.filter(p => p.ownerId === this.currentOwnerId);
+
+
+          localStorage.setItem(`seller_${this.currentOwnerId}_productCount`, this.sellerProducts.length.toString());
+          }
+        },
+        error: (err) => console.error('Error loading products:', err)
+      });
+    }
+
 
   // --- ADD PRODUCT LOGIC ---
   onFileSelected(event: any) {
@@ -70,16 +73,16 @@ export class Products implements OnInit {
     formData.append('name', this.newProduct.name);
     formData.append('price', this.newProduct.price.toString());
     formData.append('description', this.newProduct.description || '');
-    formData.append('ownerId', this.currentOwnerId); 
+    formData.append('ownerId', this.currentOwnerId);
     formData.append('image', this.newProduct.image);
 
     this.productService.addProduct(formData).subscribe({
       next: (res) => {
         alert('✅ Product Added Successfully!');
-        
+
         // Reset Form
         this.newProduct = { name: '', price: null, size: '', description: '', image: null };
-        
+
         // Close Add Modal
         const modalEl = document.getElementById('addProductModal');
         if (modalEl) {
@@ -99,12 +102,12 @@ export class Products implements OnInit {
   // ==========================================
   // 🔥 NEW: EDIT PRODUCT LOGIC
   // ==========================================
-  
+
   // 1. Open the Edit Modal with current data
   openEditModal(product: any) {
     this.productToEdit = { ...product }; // Copy data so we don't mutate view directly
     this.editImageFile = null; // Reset image input
-    
+
     const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
     modal.show();
   }
@@ -123,7 +126,7 @@ export class Products implements OnInit {
     formData.append('name', this.productToEdit.name);
     formData.append('price', this.productToEdit.price);
     formData.append('description', this.productToEdit.description);
-    
+
     // Only append image if user picked a new one
     if (this.editImageFile) {
       formData.append('image', this.editImageFile);
@@ -133,7 +136,7 @@ export class Products implements OnInit {
     this.productService.updateProduct(this.productToEdit._id, formData).subscribe({
       next: (res) => {
         alert('✅ Product Updated Successfully!');
-        
+
         // Close Edit Modal
         const modalEl = document.getElementById('editProductModal');
         if (modalEl) {

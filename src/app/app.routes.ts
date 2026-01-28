@@ -12,9 +12,8 @@ import { Sellerpage } from './components/sellerpage/sellerpage';
 import { Dashboard } from './components/sellerpage/dashboard/dashboard';
 import { Orders } from './components/sellerpage/orders/orders';
 import { Products } from './components/sellerpage/products/products';
-import { Reports } from './components/sellerpage/reports/reports';
+
 import { AuthGuard } from './authguard/login-guard';
-import { SettingsComponent } from './components/sellerpage/settings/settings';
 import { Profile } from './components/profile/profile';
 
 
@@ -39,10 +38,8 @@ export const routes: Routes = [
     component: Sellerpage, canActivate: [SellerGuard],
     children: [
       { path: 'dash', component: Dashboard },
-      { path: 'orders', component: Orders },
       { path: 'prod', component: Products },
-      { path: 'report', component: Reports },
-      { path: 'settings', component: SettingsComponent }
+      { path: 'orders', component: Orders },
     ]
   },
 

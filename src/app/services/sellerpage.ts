@@ -23,20 +23,17 @@ export class ProductService {
     return this.http.post(`${this.apiUrl}/review`, reviewData);
   }
 
-  // ==========================================
-  // 2. SELLER METHODS
-  // ==========================================
+  createOrder(orderData: any) {
+  return this.http.post('http://localhost:5000/api/orders', orderData);
+  }
 
+  getSellerOrders(sellerId: string) {
+  return this.http.get<any[]>(`http://localhost:5000/api/orders/seller/${sellerId}`);
+  }
   // Add a new product
   addProduct(productData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, productData);
   }
-
-  // Get products for a specific seller
-  getSellerProducts(ownerId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}?ownerId=${ownerId}`);
-  }
-
   // Check if user has a shop
   getShopStatus(email: string): Observable<any> {
     // ✅ FIXED: Added '/api' here too
@@ -76,7 +73,12 @@ markMessagesAsRead(myId: string, otherId: string): Observable<any> {
 
 getTotalOrders(sellerId: string) {
   return this.http.get<{ totalOrders: number }>(
-    `${this.apiUrl}/count/${sellerId}`
+    `http://localhost:5000/api/orders/count/${sellerId}`
+  );
+}
+  getTotalProducts(sellerId: string) {
+  return this.http.get<{ totalProducts: number }>(
+    `http://localhost:5000/api/products/count/${sellerId}`
   );
 }
 }

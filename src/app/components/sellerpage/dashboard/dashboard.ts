@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../services/sellerpage';
 import { FormsModule } from '@angular/forms';
-import { OrdersService, Order } from '../../../services/orders';
-import { SocketService } from '../../../services/socket';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +19,9 @@ export class Dashboard implements OnInit, OnDestroy {
   totalUnread: number = 0;
   totalOrders: number = 0;
   totalProducts: number = 0;
-
+  orderProduct = '';
+  orderQuantity = 1;
+  orderTotal = 0;
   // Chat Variables
   contactList: any[] = [];
   currentMessages: any[] = [];
@@ -29,40 +31,36 @@ export class Dashboard implements OnInit, OnDestroy {
   // Interval to auto-refresh notifications
   private refreshInterval: any;
 
-  constructor(private productService: ProductService, private ordersService: OrdersService, private socketService: SocketService) {}
+  constructor(private productService: ProductService, ) {}
 
- ngOnInit(): void {
+ngOnInit(): void {
   this.currentUserId = localStorage.getItem('userId');
-
   if (!this.currentUserId) return;
 
-  // Load once
+  this.totalProducts = parseInt(
+    localStorage.getItem('sellerProductCount') || '0'
+  );
+
+  // ✅ LOAD ORDER COUNT
+  this.productService
+    .getTotalOrders(this.currentUserId)
+    .subscribe(res => {
+      this.totalOrders = res.totalOrders;
+    });
+
+   this.productService.getTotalProducts(this.currentUserId)
+    .subscribe(res => {
+      this.totalProducts = res.totalProducts;
+    });
+
   this.loadContacts();
   this.updateUnreadCount();
 
-  // 🔥 AUTO-REFRESH CHAT
   this.refreshInterval = setInterval(() => {
-
-    // 1. Update inbox list
     this.loadContacts();
-
-    // 2. Update unread badge
     this.updateUnreadCount();
-
-    // 3. If chat is open, refresh messages
-    if (this.activeChatUser) {
-      this.productService
-        .getChatHistory(this.currentUserId!, this.activeChatUser.id)
-        .subscribe(msgs => {
-          this.currentMessages = msgs;
-          this.scrollToBottom();
-        });
-    }
-
-  }, 3000); // every 3 seconds
+  }, 3000);
 }
-
-
 
   ngOnDestroy(): void {
     // Stop the timer when leaving the dashboard to prevent errors
@@ -174,4 +172,41 @@ export class Dashboard implements OnInit, OnDestroy {
       if (container) container.scrollTop = container.scrollHeight;
     }, 100);
   }
+
+  openCreateOrder() {
+  const modalEl = document.getElementById('createOrderModal');
+  const modal = new bootstrap.Modal(modalEl!);
+  modal.show();
+}
+
+confirmOrder() {
+  if (!this.activeChatUser || !this.currentUserId) return;
+
+  const orderData = {
+    sellerId: this.currentUserId,
+    buyerId: this.activeChatUser.name,
+
+    productName: this.orderProduct,
+    quantity: this.orderQuantity,
+    total: this.orderTotal,
+
+    status: 'Completed' // ✅ PURCHASED
+  };
+
+  this.productService.createOrder(orderData).subscribe({
+    next: () => {
+      alert('✅ Item marked as SOLD');
+
+      const modalEl = document.getElementById('createOrderModal');
+      bootstrap.Modal.getInstance(modalEl!)?.hide();
+
+      this.orderProduct = '';
+      this.orderQuantity = 1;
+      this.orderTotal = 0;
+    },
+    error: () => alert('❌ Failed to save order')
+  });
+}
+
+
 }

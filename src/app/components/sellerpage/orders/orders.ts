@@ -1,48 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OrdersService, Order } from '../../../services/orders';
+import { FormsModule } from '@angular/forms';
+import { ProductService } from '../../../services/sellerpage';
 
 @Component({
   selector: 'app-orders',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './orders.html',
   styleUrl: './orders.css'
 })
-export class Orders {
-  orders: Order[] = [];
-  loading = true;
-  error = '';
+export class Orders implements OnInit {
 
-  constructor(private ordersService: OrdersService) {}
+  orders: any[] = [];
+  totalOrders = 0;
+  totalAmount = 0;
+  completedOrders = 0;
+
+  currentUserId = localStorage.getItem('userId');
+
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.loadOrders();
-  }
+    if (!this.currentUserId) return;
 
-  loadOrders() {
-    this.loading = true;
-    this.ordersService.getSellerOrders().subscribe({
-      next: (data) => {
-        this.orders = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.loading = false;
-      }
-    });
-  }
+    this.productService.getSellerOrders(this.currentUserId)
+      .subscribe(res => {
+        this.orders = res;
 
-  changeStatus(order: Order, newStatus: 'Complete' | 'Cancelled') {
-    this.ordersService.updateOrderStatus(order._id, newStatus).subscribe({
-      next: () => {
-        order.status = newStatus; // Update frontend UI
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Failed to update order status');
-      }
-    });
+        // Calculate stats
+        this.totalOrders = res.length;
+        this.totalAmount = res.reduce((acc, order) => acc + order.total, 0);
+        this.completedOrders = res.filter(o => o.status === 'Completed').length;
+      });
   }
 }
-
