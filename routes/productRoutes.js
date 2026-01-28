@@ -21,29 +21,34 @@ const upload = multer({ storage });
 // ==================================================
 router.get("/", async (req, res) => {
   try {
+    const ownerId = req.query.ownerId; // seller ID from frontend
+    const matchStage = ownerId ? { ownerId } : {};
+
     const products = await Product.aggregate([
+      { $match: matchStage }, // <-- only fetch seller's products
+
       // Join with Shop
       {
         $lookup: {
-          from: "shop", 
+          from: "shop",
           localField: "ownerId",
           foreignField: "ownerId",
           as: "shopData"
         }
       },
       { $unwind: { path: "$shopData", preserveNullAndEmptyArrays: true } },
-      
+
       // Join with Reviews
       {
         $lookup: {
-          from: "reviews",        
-          localField: "_id",      
-          foreignField: "productId", 
+          from: "reviews",
+          localField: "_id",
+          foreignField: "productId",
           as: "reviews"
         }
       },
 
-      // Select Fields
+      // Select fields
       {
         $project: {
           _id: 1,
@@ -57,11 +62,13 @@ router.get("/", async (req, res) => {
         }
       }
     ]);
+
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 // ==================================================
 // 2. ADD NEW PRODUCT
@@ -149,6 +156,19 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error deleting product" });
+  }
+});
+
+router.get('/count/:sellerId', async (req, res) => {
+  try {
+    const totalProducts = await Product.countDocuments({
+      ownerId: req.params.sellerId
+    });
+
+    res.json({ totalProducts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to count products' });
   }
 });
 

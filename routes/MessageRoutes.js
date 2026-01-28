@@ -5,7 +5,20 @@ const Message = require('../model/Message');
 // 1. SEND MESSAGE
 router.post('/send', async (req, res) => {
   try {
-    const { senderId, senderName, receiverId, productId, productName, productImage, messageBody, shopName } = req.body;
+    const { 
+      senderId, 
+      senderName, 
+      receiverId, 
+      productId, 
+      productName, 
+      productImage, 
+      messageBody, 
+      shopName,
+      // 🔥 NEW: Order proposal fields
+      isOrderProposal,
+      proposedQuantity,
+      proposedPrice
+    } = req.body;
 
     const newMessage = new Message({
       senderId,
@@ -16,7 +29,11 @@ router.post('/send', async (req, res) => {
       productImage,
       messageBody,
       shopName,
-      isRead: false // Default to unread
+      isRead: false,
+      // 🔥 NEW: Order proposal data
+      isOrderProposal: isOrderProposal || false,
+      proposedQuantity: proposedQuantity || null,
+      proposedPrice: proposedPrice || null
     });
 
     const savedMessage = await newMessage.save();
@@ -55,7 +72,7 @@ router.get('/chat/:userId/:otherId', async (req, res) => {
   }
 });
 
-// 4. 🔥 GET UNREAD COUNT (This was missing!)
+// 4. GET UNREAD COUNT
 router.get('/unread-count/:userId', async (req, res) => {
   try {
     const count = await Message.countDocuments({
@@ -68,11 +85,10 @@ router.get('/unread-count/:userId', async (req, res) => {
   }
 });
 
-// 5. 🔥 MARK AS READ (This was missing!)
+// 5. MARK AS READ
 router.put('/mark-read/:userId/:otherId', async (req, res) => {
   try {
     const { userId, otherId } = req.params;
-    // Mark all messages sent BY the other person TO me as read
     await Message.updateMany(
       { senderId: otherId, receiverId: userId, isRead: false },
       { $set: { isRead: true } }

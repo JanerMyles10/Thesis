@@ -2,51 +2,38 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../model/orders');
 
-router.get('/seller', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const ownerId = req.query.ownerId; // <-- match your Shop.ownerId
-    if (!ownerId) return res.status(400).send('ownerId is required');
-
-    const orders = await Order.find({ ownerId });
-    res.json(orders);
+    const order = new Order(req.body);
+    await order.save();
+    res.status(201).json(order);
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Failed to save order' });
   }
 });
 
-router.put('/:id/status', async (req, res) => {
+// GET orders for a specific seller
+router.get('/seller/:sellerId', async (req, res) => {
   try {
-    const { status, ownerId } = req.body; // pass ownerId from frontend or get from auth
-    const order = await Order.findById(req.params.id);
-
-    if (!order) return res.status(404).send('Order not found');
-
-    // 🔒 Security check: only the owner can update their orders
-    if (order.ownerId.toString() !== ownerId) {
-      return res.status(403).send('You are not allowed to update this order');
-    }
-
-    order.status = status; // "Complete" or "Cancelled"
-    await order.save();
-    res.json({ success: true });
+    const orders = await Order.find({ sellerId: req.params.sellerId }).sort({ createdAt: -1 });
+    res.json(orders);
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Failed to fetch orders' });
   }
 });
 
 router.get('/count/:sellerId', async (req, res) => {
   try {
-    const { sellerId } = req.params;
-
     const totalOrders = await Order.countDocuments({
-      ownerId: sellerId   // IMPORTANT: same field used in Orders
+      sellerId: req.params.sellerId
     });
 
     res.json({ totalOrders });
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
     res.status(500).json({ message: 'Failed to count orders' });
   }
 });
+
+
+module.exports = router;

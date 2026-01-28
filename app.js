@@ -7,6 +7,7 @@ const shopRoutes = require("./routes/shopRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes");
 const MessageRoutes = require("./routes/MessageRoutes");
+const orderRoutes = require("./routes/orders");
 
 
 const app = express();
@@ -23,5 +24,6 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/shop-applications", shopRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/messages", MessageRoutes);
+app.use("/api/orders", orderRoutes);
 
 module.exports = app;
